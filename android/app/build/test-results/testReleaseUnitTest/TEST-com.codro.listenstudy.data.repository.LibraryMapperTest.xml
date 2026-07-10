@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.codro.listenstudy.data.repository.LibraryMapperTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-07-10T15:58:59.046Z" hostname="hermes-server" time="0.016">
+  <properties/>
+  <testcase name="resume selection breaks timestamp ties by id" classname="com.codro.listenstudy.data.repository.LibraryMapperTest" time="0.012"/>
+  <testcase name="resume selection uses newest updated document and never autoplays" classname="com.codro.listenstudy.data.repository.LibraryMapperTest" time="0.0"/>
+  <testcase name="library item clamps saved index and reports playback position" classname="com.codro.listenstudy.data.repository.LibraryMapperTest" time="0.002"/>
+  <testcase name="playback position starts at zero percent and handles zero or one sentence" classname="com.codro.listenstudy.data.repository.LibraryMapperTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

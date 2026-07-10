@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.codro.listenstudy.ui.PlayerUiFormatterTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-07-10T15:58:58.786Z" hostname="hermes-server" time="0.002">
+  <properties/>
+  <testcase name="cloud preview feedback exposes progress while synthesis is pending" classname="com.codro.listenstudy.ui.PlayerUiFormatterTest" time="0.0"/>
+  <testcase name="current sentence label is one based and clamps empty list" classname="com.codro.listenstudy.ui.PlayerUiFormatterTest" time="0.0"/>
+  <testcase name="speed label keeps one decimal place" classname="com.codro.listenstudy.ui.PlayerUiFormatterTest" time="0.0"/>
+  <testcase name="progress percent uses playback position and clamps bounds" classname="com.codro.listenstudy.ui.PlayerUiFormatterTest" time="0.001"/>
+  <testcase name="cloud preview feedback exposes terminal api error" classname="com.codro.listenstudy.ui.PlayerUiFormatterTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

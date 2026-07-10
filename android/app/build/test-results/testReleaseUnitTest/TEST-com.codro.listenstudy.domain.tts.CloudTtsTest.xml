@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.codro.listenstudy.domain.tts.CloudTtsTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-07-10T15:58:59.129Z" hostname="hermes-server" time="0.014">
+  <properties/>
+  <testcase name="cache miss synthesizes exactly once then atomically stores" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.006"/>
+  <testcase name="http error exposes safe Google reason instead of hiding response body" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.002"/>
+  <testcase name="cache key is stable and excludes playback speed" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.001"/>
+  <testcase name="http error without Google message gives restriction guidance" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.001"/>
+  <testcase name="cache hit never invokes remote and works without api key" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.001"/>
+  <testcase name="catalog exposes Korean Standard and WaveNet A through D with WaveNet A default" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.002"/>
+  <testcase name="saved cloud voice is normalized to selected playback mode" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.0"/>
+  <testcase name="cloud diagnostics show actual provider voice and cache" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.001"/>
+  <testcase name="settings validation requires key only when cloud cache misses" classname="com.codro.listenstudy.domain.tts.CloudTtsTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

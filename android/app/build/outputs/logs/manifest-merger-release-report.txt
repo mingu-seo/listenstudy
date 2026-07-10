@@ -1,0 +1,370 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:2:1-37:12
+MERGED from [androidx.activity:activity:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/b6b48f44b9dc32a1df9b471c64b007e3/transformed/activity-1.10.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.material3:material3-android:1.3.1] /home/withsky/.gradle/caches/9.6.1/transforms/6fc296054dd2ec223e8238a7f5570cb0/transformed/material3-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-datasource:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/56bc0922ec5a61ce22fa92baeb4bb960/transformed/media3-datasource-1.5.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-database:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/6b723a8e47174ac8c97a0987b6d1cea6/transformed/media3-database-1.5.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-common:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/f7c0b026b9c7678191c0148c153eaee3/transformed/media3-common-1.5.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.media3:media3-session:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/c5532f6b0910132cf15efc4350ec78b9/transformed/media3-session-1.5.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media:media:1.7.0] /home/withsky/.gradle/caches/9.6.1/transforms/5e36b717fc175199cf18a9b44ddc2c2e/transformed/media-1.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-core-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/38edf012ab58851af3a1dda072ac852e/transformed/animation-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-ripple-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/dbf70fee12e8ca56c29336fabbc8cbdc/transformed/material-ripple-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/5ebb55fc8cfd528439799fc5f36f4e1c/transformed/animation-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/71f5c370c3b5a433569f45c6c86e6d11/transformed/foundation-layout-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/26f895e3213e777dd74893dcac8b1a53/transformed/foundation-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/69008bd41f77493bea17f244de10075b/transformed/ui-unit-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/0df073db3da803cbf953a80fee1d278e/transformed/ui-geometry-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-util-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/30ee6df3194e5ce1817a00562b95ffe4/transformed/ui-util-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-text-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9a120467c79b5a6f60282d7faf5a23ba/transformed/ui-text-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/6aaf32d60aa6675c0e14264504eed001/transformed/ui-tooling-preview-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/cc229f65d32b8885c9be96d51d61ee64/transformed/ui-graphics-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.autofill:autofill:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/042ca5744489f9fb6aa880d902d340ca/transformed/autofill-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.graphics:graphics-path:1.0.1] /home/withsky/.gradle/caches/9.6.1/transforms/7d07f577432bfe0deab3b42f0982a495/transformed/graphics-path-1.0.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/withsky/.gradle/caches/9.6.1/transforms/94e1505887b5591496539e67748222fd/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/withsky/.gradle/caches/9.6.1/transforms/7568a46ba4dfc4561c5b386ad1eef35c/transformed/savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/27f0a338ed5cd41b31212da39c5d7ba5/transformed/lifecycle-runtime-compose-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/85b26b256057a3ebaacefbb2ef49327a/transformed/lifecycle-livedata-core-2.8.7/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/5d068ce22417f9aa7adbd975e5979c5d/transformed/lifecycle-viewmodel-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/1479503405ab5718eec77a090b0fede7/transformed/lifecycle-runtime-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/bb09d3ff140780e8601a380c7caf5f9b/transformed/lifecycle-viewmodel-ktx-2.8.7/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/57f890071e4101a5cb3a0069b46d91be/transformed/lifecycle-viewmodel-savedstate-2.8.7/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/c094f2f1f796d91a734dd5a0bb03b9fc/transformed/lifecycle-runtime-ktx-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/a1f8ccafcfdec32fd4231c68eb1f43c0/transformed/lifecycle-viewmodel-compose-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/a52f816c07e93116b96f6654278db881/transformed/material-icons-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9df2791a315ee8e59b802d77a2de1021/transformed/ui-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity-ktx:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/700742992a203561fbb98fd03e50bcd7/transformed/activity-ktx-1.10.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity-compose:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/4f8c4b449bde9b28c8b5cc432f7e50b6/transformed/activity-compose-1.10.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/3302b8fbe1656edfd8adfe5e5a20e996/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.core:core-ktx:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/644f14fe8ca9789e8f0edd96f2d5117d/transformed/core-ktx-1.15.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.room:room-ktx:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/c9bf4030b4c16956e338e0be0f5656cc/transformed/room-ktx-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/0b345cc7dbafc4b8e5698a35aeeba271/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/625a16753c5f2854af60d0c37b5f7031/transformed/sqlite-2.4.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/withsky/.gradle/caches/9.6.1/transforms/e55fa2b6e6dcc3d9be9c15725bebc22c/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/704a9744132029807588136ec580cde6/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/970b1b986c8d38c090fa101359fc258e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.2.0] /home/withsky/.gradle/caches/9.6.1/transforms/47851c35132b64cfbe5f441331cd8899/transformed/tracing-1.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/feffbd9292b09b99532f0ac0a69adbac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.compose.runtime:runtime-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9969f137c5746f31e9496de1f076881a/transformed/runtime-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/e55693446dd7181cf443c051b1dfaf33/transformed/runtime-saveable-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] /home/withsky/.gradle/caches/9.6.1/transforms/4663bd8278186f1dec2751356dc7124a/transformed/exifinterface-1.3.6/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /home/withsky/.gradle/caches/9.6.1/transforms/8719978696044d8d58cc1668945a662d/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:2:1-7:12
+	package
+		INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:2:11-69
+queries
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:4:5-10:15
+intent#action:name:android.intent.action.TTS_SERVICE
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:5:9-7:18
+action#android.intent.action.TTS_SERVICE
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:6:13-72
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:6:21-69
+package#com.samsung.SMT
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:8:9-51
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:8:18-48
+package#com.google.android.tts
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:9:9-58
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:9:18-55
+uses-permission#android.permission.INTERNET
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:12:5-67
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:12:22-64
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:13:5-77
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:13:22-74
+uses-permission#android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:14:5-92
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:14:22-89
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:15:5-77
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:15:22-74
+application
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:17:5-36:19
+INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:17:5-36:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/970b1b986c8d38c090fa101359fc258e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/970b1b986c8d38c090fa101359fc258e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/feffbd9292b09b99532f0ac0a69adbac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/feffbd9292b09b99532f0ac0a69adbac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+	android:extractNativeLibs
+		INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:20:9-35
+	android:label
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:19:9-36
+	android:allowBackup
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:18:9-36
+	android:theme
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:21:9-49
+activity#com.codro.listenstudy.MainActivity
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:23:9-30:20
+	android:exported
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:25:13-36
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:24:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:26:13-29:29
+action#android.intent.action.MAIN
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:27:17-69
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:27:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:28:17-77
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:28:27-74
+service#com.codro.listenstudy.playback.TtsPlaybackService
+ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:32:9-35:61
+	android:exported
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:34:13-37
+	android:foregroundServiceType
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:35:13-58
+	android:name
+		ADDED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml:33:13-56
+uses-sdk
+INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml
+INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml
+MERGED from [androidx.activity:activity:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/b6b48f44b9dc32a1df9b471c64b007e3/transformed/activity-1.10.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/b6b48f44b9dc32a1df9b471c64b007e3/transformed/activity-1.10.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.material3:material3-android:1.3.1] /home/withsky/.gradle/caches/9.6.1/transforms/6fc296054dd2ec223e8238a7f5570cb0/transformed/material3-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.material3:material3-android:1.3.1] /home/withsky/.gradle/caches/9.6.1/transforms/6fc296054dd2ec223e8238a7f5570cb0/transformed/material3-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-datasource:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/56bc0922ec5a61ce22fa92baeb4bb960/transformed/media3-datasource-1.5.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-datasource:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/56bc0922ec5a61ce22fa92baeb4bb960/transformed/media3-datasource-1.5.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-database:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/6b723a8e47174ac8c97a0987b6d1cea6/transformed/media3-database-1.5.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-database:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/6b723a8e47174ac8c97a0987b6d1cea6/transformed/media3-database-1.5.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-common:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/f7c0b026b9c7678191c0148c153eaee3/transformed/media3-common-1.5.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-common:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/f7c0b026b9c7678191c0148c153eaee3/transformed/media3-common-1.5.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-session:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/c5532f6b0910132cf15efc4350ec78b9/transformed/media3-session-1.5.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-session:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/c5532f6b0910132cf15efc4350ec78b9/transformed/media3-session-1.5.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.7.0] /home/withsky/.gradle/caches/9.6.1/transforms/5e36b717fc175199cf18a9b44ddc2c2e/transformed/media-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.media:media:1.7.0] /home/withsky/.gradle/caches/9.6.1/transforms/5e36b717fc175199cf18a9b44ddc2c2e/transformed/media-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/38edf012ab58851af3a1dda072ac852e/transformed/animation-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/38edf012ab58851af3a1dda072ac852e/transformed/animation-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/dbf70fee12e8ca56c29336fabbc8cbdc/transformed/material-ripple-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/dbf70fee12e8ca56c29336fabbc8cbdc/transformed/material-ripple-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/5ebb55fc8cfd528439799fc5f36f4e1c/transformed/animation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/5ebb55fc8cfd528439799fc5f36f4e1c/transformed/animation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/71f5c370c3b5a433569f45c6c86e6d11/transformed/foundation-layout-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/71f5c370c3b5a433569f45c6c86e6d11/transformed/foundation-layout-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/26f895e3213e777dd74893dcac8b1a53/transformed/foundation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/26f895e3213e777dd74893dcac8b1a53/transformed/foundation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/69008bd41f77493bea17f244de10075b/transformed/ui-unit-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/69008bd41f77493bea17f244de10075b/transformed/ui-unit-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/0df073db3da803cbf953a80fee1d278e/transformed/ui-geometry-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/0df073db3da803cbf953a80fee1d278e/transformed/ui-geometry-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/30ee6df3194e5ce1817a00562b95ffe4/transformed/ui-util-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/30ee6df3194e5ce1817a00562b95ffe4/transformed/ui-util-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9a120467c79b5a6f60282d7faf5a23ba/transformed/ui-text-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9a120467c79b5a6f60282d7faf5a23ba/transformed/ui-text-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/6aaf32d60aa6675c0e14264504eed001/transformed/ui-tooling-preview-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/6aaf32d60aa6675c0e14264504eed001/transformed/ui-tooling-preview-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/cc229f65d32b8885c9be96d51d61ee64/transformed/ui-graphics-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/cc229f65d32b8885c9be96d51d61ee64/transformed/ui-graphics-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.autofill:autofill:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/042ca5744489f9fb6aa880d902d340ca/transformed/autofill-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.autofill:autofill:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/042ca5744489f9fb6aa880d902d340ca/transformed/autofill-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.graphics:graphics-path:1.0.1] /home/withsky/.gradle/caches/9.6.1/transforms/7d07f577432bfe0deab3b42f0982a495/transformed/graphics-path-1.0.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.graphics:graphics-path:1.0.1] /home/withsky/.gradle/caches/9.6.1/transforms/7d07f577432bfe0deab3b42f0982a495/transformed/graphics-path-1.0.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/withsky/.gradle/caches/9.6.1/transforms/94e1505887b5591496539e67748222fd/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/withsky/.gradle/caches/9.6.1/transforms/94e1505887b5591496539e67748222fd/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/withsky/.gradle/caches/9.6.1/transforms/7568a46ba4dfc4561c5b386ad1eef35c/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/withsky/.gradle/caches/9.6.1/transforms/7568a46ba4dfc4561c5b386ad1eef35c/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/27f0a338ed5cd41b31212da39c5d7ba5/transformed/lifecycle-runtime-compose-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/27f0a338ed5cd41b31212da39c5d7ba5/transformed/lifecycle-runtime-compose-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/85b26b256057a3ebaacefbb2ef49327a/transformed/lifecycle-livedata-core-2.8.7/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/85b26b256057a3ebaacefbb2ef49327a/transformed/lifecycle-livedata-core-2.8.7/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/5d068ce22417f9aa7adbd975e5979c5d/transformed/lifecycle-viewmodel-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/5d068ce22417f9aa7adbd975e5979c5d/transformed/lifecycle-viewmodel-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/1479503405ab5718eec77a090b0fede7/transformed/lifecycle-runtime-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/1479503405ab5718eec77a090b0fede7/transformed/lifecycle-runtime-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/bb09d3ff140780e8601a380c7caf5f9b/transformed/lifecycle-viewmodel-ktx-2.8.7/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/bb09d3ff140780e8601a380c7caf5f9b/transformed/lifecycle-viewmodel-ktx-2.8.7/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/57f890071e4101a5cb3a0069b46d91be/transformed/lifecycle-viewmodel-savedstate-2.8.7/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/57f890071e4101a5cb3a0069b46d91be/transformed/lifecycle-viewmodel-savedstate-2.8.7/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/c094f2f1f796d91a734dd5a0bb03b9fc/transformed/lifecycle-runtime-ktx-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/c094f2f1f796d91a734dd5a0bb03b9fc/transformed/lifecycle-runtime-ktx-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/a1f8ccafcfdec32fd4231c68eb1f43c0/transformed/lifecycle-viewmodel-compose-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/a1f8ccafcfdec32fd4231c68eb1f43c0/transformed/lifecycle-viewmodel-compose-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/a52f816c07e93116b96f6654278db881/transformed/material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/a52f816c07e93116b96f6654278db881/transformed/material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9df2791a315ee8e59b802d77a2de1021/transformed/ui-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9df2791a315ee8e59b802d77a2de1021/transformed/ui-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/700742992a203561fbb98fd03e50bcd7/transformed/activity-ktx-1.10.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/700742992a203561fbb98fd03e50bcd7/transformed/activity-ktx-1.10.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/4f8c4b449bde9b28c8b5cc432f7e50b6/transformed/activity-compose-1.10.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.10.0] /home/withsky/.gradle/caches/9.6.1/transforms/4f8c4b449bde9b28c8b5cc432f7e50b6/transformed/activity-compose-1.10.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/3302b8fbe1656edfd8adfe5e5a20e996/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/3302b8fbe1656edfd8adfe5e5a20e996/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.core:core-ktx:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/644f14fe8ca9789e8f0edd96f2d5117d/transformed/core-ktx-1.15.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/644f14fe8ca9789e8f0edd96f2d5117d/transformed/core-ktx-1.15.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-ktx:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/c9bf4030b4c16956e338e0be0f5656cc/transformed/room-ktx-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-ktx:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/c9bf4030b4c16956e338e0be0f5656cc/transformed/room-ktx-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/0b345cc7dbafc4b8e5698a35aeeba271/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/0b345cc7dbafc4b8e5698a35aeeba271/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/625a16753c5f2854af60d0c37b5f7031/transformed/sqlite-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/625a16753c5f2854af60d0c37b5f7031/transformed/sqlite-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/withsky/.gradle/caches/9.6.1/transforms/e55fa2b6e6dcc3d9be9c15725bebc22c/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/withsky/.gradle/caches/9.6.1/transforms/e55fa2b6e6dcc3d9be9c15725bebc22c/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/704a9744132029807588136ec580cde6/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/withsky/.gradle/caches/9.6.1/transforms/704a9744132029807588136ec580cde6/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/970b1b986c8d38c090fa101359fc258e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/970b1b986c8d38c090fa101359fc258e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.2.0] /home/withsky/.gradle/caches/9.6.1/transforms/47851c35132b64cfbe5f441331cd8899/transformed/tracing-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.tracing:tracing:1.2.0] /home/withsky/.gradle/caches/9.6.1/transforms/47851c35132b64cfbe5f441331cd8899/transformed/tracing-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/feffbd9292b09b99532f0ac0a69adbac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/feffbd9292b09b99532f0ac0a69adbac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9969f137c5746f31e9496de1f076881a/transformed/runtime-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/9969f137c5746f31e9496de1f076881a/transformed/runtime-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/e55693446dd7181cf443c051b1dfaf33/transformed/runtime-saveable-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.6] /home/withsky/.gradle/caches/9.6.1/transforms/e55693446dd7181cf443c051b1dfaf33/transformed/runtime-saveable-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] /home/withsky/.gradle/caches/9.6.1/transforms/4663bd8278186f1dec2751356dc7124a/transformed/exifinterface-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] /home/withsky/.gradle/caches/9.6.1/transforms/4663bd8278186f1dec2751356dc7124a/transformed/exifinterface-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /home/withsky/.gradle/caches/9.6.1/transforms/8719978696044d8d58cc1668945a662d/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /home/withsky/.gradle/caches/9.6.1/transforms/8719978696044d8d58cc1668945a662d/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:5:5-44
+	android:targetSdkVersion
+		INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /workspace/08_projects/codro/listenstudy/repo/android/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [androidx.media3:media3-common:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/f7c0b026b9c7678191c0148c153eaee3/transformed/media3-common-1.5.1/AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from [androidx.media3:media3-common:1.5.1] /home/withsky/.gradle/caches/9.6.1/transforms/f7c0b026b9c7678191c0148c153eaee3/transformed/media3-common-1.5.1/AndroidManifest.xml:22:22-76
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/970b1b986c8d38c090fa101359fc258e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/withsky/.gradle/caches/9.6.1/transforms/970b1b986c8d38c090fa101359fc258e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/withsky/.gradle/caches/9.6.1/transforms/9d1076a55d0243df6b4f0dad2ff136b6/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:23:9-81
+permission#com.codro.listenstudy.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:26:22-94
+uses-permission#com.codro.listenstudy.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.15.0] /home/withsky/.gradle/caches/9.6.1/transforms/f8a3c020079e33f4fe6df4593511a0e9/transformed/core-1.15.0/AndroidManifest.xml:26:22-94
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] /home/withsky/.gradle/caches/9.6.1/transforms/f64464555a792c076f17ebf867bc4e65/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:30:17-78
+service#androidx.room.MultiInstanceInvalidationService
+ADDED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+	android:exported
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+	tools:ignore
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:28:13-60
+	android:directBootAware
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+	android:name
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/withsky/.gradle/caches/9.6.1/transforms/3d30af5002affba75f791b0a7334c36f/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] /home/withsky/.gradle/caches/9.6.1/transforms/7f2cfd3825e17887053fa9e81cc57a7a/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:25-92
