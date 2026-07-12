@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.codro.listenstudy.domain.tts.PlaybackGenerationGuardTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-07-10T15:58:59.144Z" hostname="hermes-server" time="0.0">
-  <properties/>
-  <testcase name="current token can run callback exactly once per invocation" classname="com.codro.listenstudy.domain.tts.PlaybackGenerationGuardTest" time="0.0"/>
-  <testcase name="invalidated token cannot run a delayed callback" classname="com.codro.listenstudy.domain.tts.PlaybackGenerationGuardTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

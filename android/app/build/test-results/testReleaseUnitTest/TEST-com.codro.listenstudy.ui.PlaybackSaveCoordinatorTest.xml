@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.codro.listenstudy.ui.PlaybackSaveCoordinatorTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-07-10T15:58:59.152Z" hostname="hermes-server" time="0.006">
-  <properties/>
-  <testcase name="serialized writer skips a superseded request waiting behind a write" classname="com.codro.listenstudy.ui.PlaybackSaveCoordinatorTest" time="0.006"/>
-  <testcase name="request keeps immutable document and playback snapshot" classname="com.codro.listenstudy.ui.PlaybackSaveCoordinatorTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.codro.listenstudy.domain.tts.TtsSelectionMigrationTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-10T15:58:59.146Z" hostname="hermes-server" time="0.0">
-  <properties/>
-  <testcase name="previous_migration_version_resets_voice_selected_by_older_apk" classname="com.codro.listenstudy.domain.tts.TtsSelectionMigrationTest" time="0.0"/>
-  <testcase name="current_migration_version_keeps_new_user_selection" classname="com.codro.listenstudy.domain.tts.TtsSelectionMigrationTest" time="0.0"/>
-  <testcase name="legacy_or_missing_migration_version_resets_saved_engine_and_voice" classname="com.codro.listenstudy.domain.tts.TtsSelectionMigrationTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

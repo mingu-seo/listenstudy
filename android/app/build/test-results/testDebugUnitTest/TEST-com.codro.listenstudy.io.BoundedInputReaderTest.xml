@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.codro.listenstudy.io.BoundedInputReaderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-10T15:58:58.778Z" hostname="hermes-server" time="0.001">
-  <properties/>
-  <testcase name="rejects a stream as soon as it exceeds the limit" classname="com.codro.listenstudy.io.BoundedInputReaderTest" time="0.0"/>
-  <testcase name="reads a stream whose size is exactly the limit" classname="com.codro.listenstudy.io.BoundedInputReaderTest" time="0.001"/>
-  <testcase name="rejects a negative limit" classname="com.codro.listenstudy.io.BoundedInputReaderTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
