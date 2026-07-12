@@ -56,7 +56,6 @@ import com.codro.listenstudy.domain.tts.TtsEngineSelection
 import com.codro.listenstudy.domain.tts.TtsVoiceOption
 import com.codro.listenstudy.domain.tts.TtsVoiceSelection
 import com.codro.listenstudy.domain.tts.VoiceFilter
-import com.codro.listenstudy.domain.tts.CloudPlaybackDiagnostics
 import com.codro.listenstudy.domain.tts.CloudVoiceCatalog
 import com.codro.listenstudy.domain.tts.PlaybackMode
 
@@ -76,12 +75,6 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
     val cloudCacheStats by viewModel.cloudCacheStats.collectAsState()
     val libraryItems by viewModel.libraryItems.collectAsState()
     val showLibrary by viewModel.showLibrary.collectAsState()
-    val cloudDiagnostics = CloudPlaybackDiagnostics.create(
-        mode = playbackMode,
-        voice = cloudVoice,
-        cacheFileCount = cloudCacheStats.fileCount,
-        cacheBytes = cloudCacheStats.totalBytes,
-    )
     val listState = rememberLazyListState()
     val selectedVoiceLabel = TtsVoiceSelection.labelFor(voiceOptions, selectedVoiceId)
     val selectedEngineLabel = TtsEngineSelection.labelFor(engineOptions, selectedEnginePackageName)
@@ -139,17 +132,6 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
                 listState = listState,
                 onSentenceClick = viewModel::jumpTo,
                 modifier = Modifier.weight(1f),
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            CompactDiagnostics(
-                playbackMode = playbackMode,
-                selectedEngineLabel = selectedEngineLabel,
-                selectedVoiceLabel = selectedVoiceLabel,
-                voiceCount = voiceOptions.size,
-                cloudDiagnostics = cloudDiagnostics,
-                ttsStatus = ttsStatus,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -354,6 +336,8 @@ private fun DocumentTextPanel(
     onSentenceClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val layout = PlayerUiFormatter.documentTextLayout()
+
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
@@ -374,12 +358,13 @@ private fun DocumentTextPanel(
                     .fillMaxSize()
                     .padding(horizontal = 18.dp, vertical = 16.dp),
                 state = listState,
-                verticalArrangement = Arrangement.spacedBy(2.dp),
+                verticalArrangement = Arrangement.spacedBy(layout.sentenceSpacingDp.dp),
             ) {
                 itemsIndexed(sentences) { index, sentence ->
                     DocumentSentenceLine(
                         sentence = sentence,
                         current = index == currentIndex,
+                        verticalPaddingDp = layout.sentenceVerticalPaddingDp,
                         onClick = { onSentenceClick(index) },
                     )
                 }
@@ -392,6 +377,7 @@ private fun DocumentTextPanel(
 private fun DocumentSentenceLine(
     sentence: String,
     current: Boolean,
+    verticalPaddingDp: Int,
     onClick: () -> Unit,
 ) {
     Text(
@@ -401,70 +387,12 @@ private fun DocumentSentenceLine(
             .clip(RoundedCornerShape(8.dp))
             .background(if (current) Color(0xFFFFF2CC) else Color.Transparent)
             .clickable(onClick = onClick)
-            .padding(horizontal = 4.dp, vertical = 7.dp),
+            .padding(horizontal = 4.dp, vertical = verticalPaddingDp.dp),
         style = MaterialTheme.typography.bodyLarge,
         color = if (current) Color(0xFF111827) else Color(0xFF374151),
         fontWeight = if (current) FontWeight.Bold else FontWeight.Normal,
         lineHeight = MaterialTheme.typography.bodyLarge.lineHeight,
     )
-}
-
-@Composable
-private fun CompactDiagnostics(
-    playbackMode: PlaybackMode,
-    selectedEngineLabel: String,
-    selectedVoiceLabel: String,
-    voiceCount: Int,
-    cloudDiagnostics: CloudPlaybackDiagnostics,
-    ttsStatus: String,
-) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        if (playbackMode == PlaybackMode.ON_DEVICE) {
-            Text(
-                text = "엔진: $selectedEngineLabel",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF6B7280),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = "목소리: $selectedVoiceLabel (${voiceCount}개)",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF6B7280),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        } else {
-            Text(
-                text = "엔진: ${cloudDiagnostics.engine}",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF2563EB),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = "목소리: ${cloudDiagnostics.voice}",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF6B7280),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = cloudDiagnostics.cache,
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF6B7280),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        Text(
-            text = "TTS 상태: $ttsStatus",
-            style = MaterialTheme.typography.bodySmall,
-            color = Color(0xFF9CA3AF),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
 }
 
 @Composable
@@ -483,6 +411,8 @@ private fun BottomPlayerBar(
     onPreviewVoice: () -> Unit,
     onCloudSettings: () -> Unit,
 ) {
+    val controlVisibility = PlayerUiFormatter.bottomPlayerControlVisibility(expanded)
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -525,35 +455,38 @@ private fun BottomPlayerBar(
                 )
             }
 
+            if (controlVisibility.showPrimaryPlaybackControls) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    TinyOutlinedButton(
+                        text = "이전",
+                        onClick = onPrevious,
+                        modifier = Modifier.weight(1f),
+                    )
+                    TinyButton(
+                        text = if (status == PlaybackStatus.Playing) "일시정지" else "재생",
+                        onClick = onPlayPause,
+                        modifier = Modifier.weight(1.2f),
+                    )
+                    TinyOutlinedButton(
+                        text = "다음",
+                        onClick = onNext,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+
             AnimatedVisibility(
-                visible = expanded,
+                visible = controlVisibility.showAdditionalControls,
                 enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
             ) {
                 Column {
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        TinyOutlinedButton(
-                            text = "이전",
-                            onClick = onPrevious,
-                            modifier = Modifier.weight(1f),
-                        )
-                        TinyButton(
-                            text = if (status == PlaybackStatus.Playing) "일시정지" else "재생",
-                            onClick = onPlayPause,
-                            modifier = Modifier.weight(1.2f),
-                        )
-                        TinyOutlinedButton(
-                            text = "다음",
-                            onClick = onNext,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(6.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(6.dp),

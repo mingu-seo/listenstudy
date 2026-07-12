@@ -34,6 +34,26 @@ class PlayerUiFormatterTest {
     }
 
     @Test
+    fun `bottom player keeps primary playback controls visible while collapsed and expanded`() {
+        val collapsed = PlayerUiFormatter.bottomPlayerControlVisibility(expanded = false)
+        val expanded = PlayerUiFormatter.bottomPlayerControlVisibility(expanded = true)
+
+        assertEquals(true, collapsed.showPrimaryPlaybackControls)
+        assertEquals(false, collapsed.showAdditionalControls)
+        assertEquals(true, expanded.showPrimaryPlaybackControls)
+        assertEquals(true, expanded.showAdditionalControls)
+    }
+
+    @Test
+    fun `document text layout uses compact sentence spacing and hides diagnostics`() {
+        val layout = PlayerUiFormatter.documentTextLayout()
+
+        assertEquals(3, layout.sentenceVerticalPaddingDp)
+        assertEquals(0, layout.sentenceSpacingDp)
+        assertEquals(false, layout.showCompactDiagnostics)
+    }
+
+    @Test
     fun `cloud preview feedback exposes terminal api error`() {
         val feedback = PlayerUiFormatter.cloudPreviewFeedback(
             "Google Cloud TTS 요청 실패 (HTTP 403): API 키의 애플리케이션 제한을 확인하세요.",

@@ -4,8 +4,8 @@
 
 ## 현재 버전
 
-- `versionCode`: 24
-- `versionName`: `0.8.0-library-resume`
+- `versionCode`: 26
+- `versionName`: `0.8.2-expanded-text-area`
 - 패키지: `com.codro.listenstudy`
 - 최소 SDK: 26
 - 대상 SDK: 35

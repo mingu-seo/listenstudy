@@ -8,7 +8,30 @@ data class CloudPreviewFeedback(
     val isError: Boolean,
 )
 
+data class BottomPlayerControlVisibility(
+    val showPrimaryPlaybackControls: Boolean,
+    val showAdditionalControls: Boolean,
+)
+
+data class DocumentTextLayout(
+    val sentenceVerticalPaddingDp: Int,
+    val sentenceSpacingDp: Int,
+    val showCompactDiagnostics: Boolean,
+)
+
 object PlayerUiFormatter {
+    fun documentTextLayout(): DocumentTextLayout = DocumentTextLayout(
+        sentenceVerticalPaddingDp = 3,
+        sentenceSpacingDp = 0,
+        showCompactDiagnostics = false,
+    )
+
+    fun bottomPlayerControlVisibility(expanded: Boolean): BottomPlayerControlVisibility =
+        BottomPlayerControlVisibility(
+            showPrimaryPlaybackControls = true,
+            showAdditionalControls = expanded,
+        )
+
     fun sentenceCounter(currentIndex: Int, total: Int): String {
         if (total <= 0) return "현재 문장 0 / 0"
         val current = (currentIndex + 1).coerceIn(1, total)
