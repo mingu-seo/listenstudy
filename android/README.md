@@ -4,8 +4,8 @@
 
 ## 현재 버전
 
-- `versionCode`: 26
-- `versionName`: `0.8.2-expanded-text-area`
+- `versionCode`: 27
+- `versionName`: `0.9.0-service-owned-playback`
 - 패키지: `com.codro.listenstudy`
 - 최소 SDK: 26
 - 대상 SDK: 35
@@ -22,7 +22,9 @@
 - 0.5x~3.0x 배속
 - Room 기반 문서·문장·진도 영속화
 - 서재 문서 목록, 이어듣기, 문서 삭제
-- Foreground Service와 MediaSession 기반 알림·미디어 컨트롤 골격
+- Foreground Service 소유 TTS/재생 세션과 StateFlow 기반 UI 상태 구독
+- 알림·MediaSession·화면이 하나의 서비스 재생 세션을 제어
+- sticky 재시작 시 최근 문서/위치를 일시정지 상태로 안전 복원
 
 ## 프로젝트 구조
 
@@ -53,11 +55,10 @@ app/build/outputs/apk/debug/app-debug.apk
 
 ## 남은 핵심 작업
 
-1. 실제 재생 엔진과 컨트롤러를 Foreground Service 수명주기로 이동
-2. 오디오 포커스, 전화 수신, 이어폰 분리 대응
-3. 잠금화면·백그라운드 장시간 재생 실기기 검증
-4. 문장별 일시정지, 수면 타이머, 북마크, 학습 통계
-5. Spring Boot 백엔드 인증·진도 동기화·Cloud TTS 프록시 연동
+1. 오디오 포커스, 전화 수신, 이어폰 분리 대응
+2. 잠금화면·프로세스 재생성·백그라운드 장시간 재생 실기기 검증
+3. 문장별 일시정지, 수면 타이머, 북마크, 학습 통계
+4. Spring Boot 백엔드 인증·진도 동기화·Cloud TTS 프록시 연동
 
 ## 보안
 

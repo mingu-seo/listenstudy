@@ -13,8 +13,8 @@ android {
         applicationId = "com.codro.listenstudy"
         minSdk = 26
         targetSdk = 35
-        versionCode = 26
-        versionName = "0.8.2-expanded-text-area"
+        versionCode = 27
+        versionName = "0.9.0-service-owned-playback"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

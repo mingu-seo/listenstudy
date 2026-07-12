@@ -18,7 +18,7 @@ class PlaybackControllerTest {
         controller.play()
 
         assertEquals(PlaybackStatus.Playing, controller.state.value.status)
-        assertEquals(listOf("listenstudy_sentence_0_0|1.5|첫 문장"), spoken)
+        assertEquals(listOf("listenstudy_sentence_0_1_0|1.5|첫 문장"), spoken)
     }
 
     @Test
@@ -47,8 +47,8 @@ class PlaybackControllerTest {
         assertEquals(PlaybackStatus.Playing, controller.state.value.status)
         assertEquals(
             listOf(
-                "listenstudy_sentence_0_0|첫 문장",
-                "listenstudy_sentence_0_1|두 번째 문장",
+                "listenstudy_sentence_0_1_0|첫 문장",
+                "listenstudy_sentence_0_3_1|두 번째 문장",
             ),
             spoken,
         )
@@ -73,8 +73,8 @@ class PlaybackControllerTest {
         assertEquals(PlaybackStatus.Playing, controller.state.value.status)
         assertEquals(
             listOf(
-                "listenstudy_sentence_0_1|두 번째 문장",
-                "listenstudy_sentence_0_0|첫 문장",
+                "listenstudy_sentence_0_2_1|두 번째 문장",
+                "listenstudy_sentence_0_4_0|첫 문장",
             ),
             spoken,
         )
@@ -92,14 +92,14 @@ class PlaybackControllerTest {
         )
 
         controller.play()
-        controller.onSentenceDone("listenstudy_sentence_0_0")
+        controller.onSentenceDone("listenstudy_sentence_0_1_0")
 
         assertEquals(1, controller.state.value.currentIndex)
         assertEquals(PlaybackStatus.Playing, controller.state.value.status)
         assertEquals(
             listOf(
-                "listenstudy_sentence_0_0|첫 문장",
-                "listenstudy_sentence_0_1|두 번째 문장",
+                "listenstudy_sentence_0_1_0|첫 문장",
+                "listenstudy_sentence_0_2_1|두 번째 문장",
             ),
             spoken,
         )
@@ -162,7 +162,7 @@ class PlaybackControllerTest {
 
         assertEquals(0, controller.state.value.currentIndex)
         assertEquals(PlaybackStatus.Playing, controller.state.value.status)
-        assertEquals(listOf("listenstudy_sentence_0_0", "listenstudy_sentence_1_0"), spokenIds)
+        assertEquals(listOf("listenstudy_sentence_0_1_0", "listenstudy_sentence_1_3_0"), spokenIds)
     }
 
     @Test

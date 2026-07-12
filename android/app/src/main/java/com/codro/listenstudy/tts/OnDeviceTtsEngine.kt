@@ -28,6 +28,7 @@ class OnDeviceTtsEngine(
     )
 
     private var onDone: (String) -> Unit = {}
+    private var onError: (String) -> Unit = {}
     private var onStatus: (String) -> Unit = {}
     private var onVoicesChanged: (List<TtsVoiceOption>, String?) -> Unit = { _, _ -> }
     private var onEnginesChanged: (List<TtsEngineOption>, String?) -> Unit = { _, _ -> }
@@ -118,7 +119,7 @@ class OnDeviceTtsEngine(
                 }
 
                 override fun onError(utteranceId: String?) {
-                    notifyStatus("TTS 재생 오류: ${utteranceId ?: "unknown"}")
+                    notifyError("TTS 재생 오류: ${utteranceId ?: "unknown"}")
                 }
 
                 override fun onDone(utteranceId: String?) {
@@ -236,11 +237,11 @@ class OnDeviceTtsEngine(
         try {
             val result = tts?.speak(text, TextToSpeech.QUEUE_FLUSH, params, utteranceId)
             if (result == TextToSpeech.ERROR) {
-                notifyStatus("TTS speak 호출 실패: 휴대폰 TTS 엔진/음성 데이터를 확인하세요.")
+                notifyError("TTS speak 호출 실패: 휴대폰 TTS 엔진/음성 데이터를 확인하세요.")
             }
         } catch (exception: RuntimeException) {
             Log.e(TAG, "TextToSpeech.speak failed", exception)
-            notifyStatus("TTS speak 예외: ${exception.javaClass.simpleName}")
+            notifyError("TTS speak 예외: ${exception.javaClass.simpleName}")
         }
     }
 
@@ -258,6 +259,14 @@ class OnDeviceTtsEngine(
                     Log.e(TAG, "TTS done callback failed", it)
                     onStatus("TTS 완료 콜백 예외: ${it.javaClass.simpleName}")
                 }
+        }
+    }
+
+    private fun notifyError(message: String) {
+        notifyStatus(message)
+        mainHandler.post {
+            runCatching { onError(message) }
+                .onFailure { Log.e(TAG, "TTS error callback failed", it) }
         }
     }
 
@@ -282,6 +291,10 @@ class OnDeviceTtsEngine(
 
     override fun setOnDoneListener(listener: (utteranceId: String) -> Unit) {
         onDone = listener
+    }
+
+    override fun setOnErrorListener(listener: (message: String) -> Unit) {
+        onError = listener
     }
 
     override fun setOnStatusListener(listener: (message: String) -> Unit) {

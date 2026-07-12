@@ -12,6 +12,7 @@ interface TtsEngine {
     fun stop()
     fun shutdown()
     fun setOnDoneListener(listener: (utteranceId: String) -> Unit)
+    fun setOnErrorListener(listener: (message: String) -> Unit)
     fun setOnStatusListener(listener: (message: String) -> Unit)
     fun setOnVoicesChangedListener(listener: (voices: List<TtsVoiceOption>, selectedVoiceId: String?) -> Unit)
     fun setOnEnginesChangedListener(listener: (engines: List<TtsEngineOption>, selectedEnginePackageName: String?) -> Unit)
