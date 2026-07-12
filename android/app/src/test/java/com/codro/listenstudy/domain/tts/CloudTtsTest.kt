@@ -59,12 +59,12 @@ class CloudTtsTest {
     }
 
     @Test fun `cache hit never invokes remote and works without api key`() = runTest {
-        val cache = FakeCache(byteArrayOf(1, 2, 3))
+        val cache = FakeCache(byteArrayOf(0xff.toByte(), 0xfb.toByte(), 1, 2))
         val remote = FakeRemote()
         val result = CloudCacheFirstSynthesizer(cache, remote).audio(
             CloudSynthesisRequest("문장", "ko-KR-Wavenet-A", "MP3"), apiKey = "",
         )
-        assertArrayEquals(byteArrayOf(1, 2, 3), result.bytes)
+        assertArrayEquals(byteArrayOf(0xff.toByte(), 0xfb.toByte(), 1, 2), result.bytes)
         assertTrue(result.fromCache)
         assertEquals(0, remote.calls)
         assertEquals(0, cache.writes)
@@ -75,7 +75,7 @@ class CloudTtsTest {
         val remote = FakeRemote()
         val request = CloudSynthesisRequest("문장", "ko-KR-Standard-A", "MP3")
         val result = CloudCacheFirstSynthesizer(cache, remote).audio(request, "secret")
-        assertArrayEquals(byteArrayOf(9, 8), result.bytes)
+        assertArrayEquals(byteArrayOf(0xff.toByte(), 0xfb.toByte(), 9, 8), result.bytes)
         assertFalse(result.fromCache)
         assertEquals(1, remote.calls)
         assertEquals(1, cache.writes)
@@ -102,7 +102,7 @@ class CloudTtsTest {
         var calls = 0
         override suspend fun synthesize(request: CloudSynthesisRequest, apiKey: String): ByteArray {
             calls++
-            return byteArrayOf(9, 8)
+            return byteArrayOf(0xff.toByte(), 0xfb.toByte(), 9, 8)
         }
     }
 
@@ -116,5 +116,6 @@ class CloudTtsTest {
             lastKey = key
             value = bytes
         }
+        override suspend fun invalidate(key: String) { value = null }
     }
 }

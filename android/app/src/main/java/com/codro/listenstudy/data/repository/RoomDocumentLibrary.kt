@@ -24,6 +24,7 @@ class RoomDocumentLibrary(
     private val now: () -> Long = System::currentTimeMillis,
     private val newId: () -> String = { UUID.randomUUID().toString() },
 ) : DocumentLibrary {
+    companion object { const val SENTENCE_INSERT_BATCH_SIZE = 500 }
     override fun observeLibrary(): Flow<List<LibraryItem>> =
         database.documentDao().observeDocuments().map { documents ->
             documents.map { LibraryMapper.toLibraryItem(it.toStoredDocument()) }
@@ -53,17 +54,19 @@ class RoomDocumentLibrary(
                     defaultSpeed = 1f,
                 ),
             )
-            database.sentenceDao().upsertSentences(sentences.map { sentence ->
-                SentenceEntity(
-                    id = "$id:${sentence.index}",
-                    documentId = id,
-                    sentenceIndex = sentence.index,
-                    text = sentence.text,
-                    startOffset = sentence.startOffset,
-                    endOffset = sentence.endOffset,
-                    cachedAudioPath = null,
-                )
-            })
+            sentences.chunked(SENTENCE_INSERT_BATCH_SIZE).forEach { batch ->
+                database.sentenceDao().upsertSentences(batch.map { sentence ->
+                    SentenceEntity(
+                        id = "$id:${sentence.index}",
+                        documentId = id,
+                        sentenceIndex = sentence.index,
+                        text = sentence.text,
+                        startOffset = sentence.startOffset,
+                        endOffset = sentence.endOffset,
+                        cachedAudioPath = null,
+                    )
+                })
+            }
 
         }
         return SavedDocument(id, title, sentences.map { it.text }, 0, 1f)

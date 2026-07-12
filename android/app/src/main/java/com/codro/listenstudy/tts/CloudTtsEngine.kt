@@ -35,9 +35,11 @@ class CloudTtsSettings(context: Context) {
 data class CloudCacheStats(val fileCount: Int, val totalBytes: Long)
 
 class FileCloudAudioCache(context: Context) : CloudAudioCache {
+    companion object { const val DEFAULT_MAX_BYTES = 128L * 1024 * 1024 }
     val directory = File(context.filesDir, "cloud_tts_cache").apply { mkdirs() }
     fun file(key: String) = File(directory, "$key.mp3")
-    override suspend fun read(key: String): ByteArray? = file(key).takeIf { it.isFile }?.readBytes()
+    override suspend fun read(key: String): ByteArray? = file(key).takeIf { it.isFile }?.also { it.setLastModified(System.currentTimeMillis()) }?.readBytes()
+    override suspend fun invalidate(key: String) { file(key).delete() }
     override suspend fun writeAtomically(key: String, bytes: ByteArray) {
         directory.mkdirs()
         val target = file(key)
@@ -47,10 +49,19 @@ class FileCloudAudioCache(context: Context) : CloudAudioCache {
             temp.copyTo(target, overwrite = true)
             temp.delete()
         }
+        trimTo(DEFAULT_MAX_BYTES)
     }
     fun stats(): CloudCacheStats = directory.listFiles()?.filter { it.isFile && it.extension == "mp3" }
         ?.let { CloudCacheStats(it.size, it.sumOf(File::length)) } ?: CloudCacheStats(0, 0)
     fun clear() { directory.listFiles()?.forEach { it.delete() } }
+    fun trimTo(maxBytes: Long) {
+        val files = directory.listFiles()?.filter { it.isFile && it.extension == "mp3" }?.sortedBy { it.lastModified() }.orEmpty()
+        var total = files.sumOf(File::length)
+        for (candidate in files) if (total > maxBytes) {
+            val size = candidate.length()
+            if (candidate.delete()) total -= size
+        }
+    }
     private fun java.io.FileOutputStream.fdSync() = fd.sync()
 }
 
@@ -98,6 +109,7 @@ class CloudTtsEngine(context: Context) {
     private val executor = Executors.newSingleThreadExecutor()
     private val main = Handler(Looper.getMainLooper())
     private val generation = PlaybackGenerationGuard()
+    private val prefetchGeneration = PlaybackGenerationGuard()
     @Volatile private var player: MediaPlayer? = null
     private var onDone: (String) -> Unit = {}
     private var onStatus: (String) -> Unit = {}
@@ -151,7 +163,19 @@ class CloudTtsEngine(context: Context) {
         }.onFailure { error("클라우드 오디오 재생 실패: ${it.javaClass.simpleName}", token) }
     }
 
-    fun stop() { stopPlayer(invalidate = true); status("정지됨") }
+    fun stop() { cancelPrefetch(); stopPlayer(invalidate = true); status("정지됨") }
+    /** Single worker bounds prefetch concurrency; context changes invalidate queued work. */
+    fun prefetch(texts: List<String>, voiceId: String, apiKey: String) {
+        if (apiKey.isBlank() || texts.isEmpty()) return
+        val token = prefetchGeneration.current()
+        executor.execute {
+            for (text in texts.distinct().take(3)) {
+                if (!prefetchGeneration.isCurrent(token)) return@execute
+                runCatching { runBlocking { synthesizer.audio(CloudSynthesisRequest(text, voiceId), apiKey) } }
+            }
+        }
+    }
+    fun cancelPrefetch() { prefetchGeneration.invalidateAndGet() }
     private fun stopPlayer(invalidate: Boolean) {
         if (invalidate) generation.invalidateAndGet()
         player?.let { runCatching { it.stop() }; it.release() }

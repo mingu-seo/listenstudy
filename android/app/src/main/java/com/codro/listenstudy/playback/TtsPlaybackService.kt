@@ -58,7 +58,12 @@ class TtsPlaybackService : Service() {
         session=PlaybackSession(emptyList(), speak={ text,id,speed ->
             val ui=mutableUi.value
             if(ui.playbackMode==PlaybackMode.ON_DEVICE){local.setSpeechRate(speed);local.speak(text,id)}
-            else cloud.speak(text,id,speed,ui.cloudVoice.id,settings.apiKey())
+            else {
+                val key = settings.apiKey()
+                cloud.speak(text,id,speed,ui.cloudVoice.id,key)
+                val playback = session.state.value
+                cloud.prefetch(CloudPrefetchPlanner(2).plan(playback.sentences, playback.currentIndex), ui.cloudVoice.id, key)
+            }
         }, stopSpeaking={local.stop();cloud.stop()})
         local.setOnStatusListener{update { copy(ttsStatus=it) }}
         local.setOnVoicesChangedListener{options,selected->update{copy(voiceOptions=options,selectedVoiceId=selected)}}

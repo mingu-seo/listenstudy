@@ -91,6 +91,7 @@ object CloudTtsHttpError {
 interface CloudAudioCache {
     suspend fun read(key: String): ByteArray?
     suspend fun writeAtomically(key: String, bytes: ByteArray)
+    suspend fun invalidate(key: String)
 }
 
 interface CloudTtsRemote {
@@ -100,11 +101,48 @@ interface CloudTtsRemote {
 class CloudCacheFirstSynthesizer(private val cache: CloudAudioCache, private val remote: CloudTtsRemote) {
     suspend fun audio(request: CloudSynthesisRequest, apiKey: String): CachedAudio {
         val key = CloudCacheKey.create(request.text, request.voiceId, request.format)
-        cache.read(key)?.let { return CachedAudio(it, key, true) }
+        cache.read(key)?.let {
+            if (CloudAudioValidator.isValid(it, request.format)) return CachedAudio(it, key, true)
+            cache.invalidate(key)
+            if (apiKey.isBlank()) throw CloudTtsFailure.CacheCorrupt()
+        }
         require(apiKey.isNotBlank()) { "Google Cloud API 키를 먼저 저장해 주세요." }
         val bytes = remote.synthesize(request, apiKey)
-        require(bytes.isNotEmpty()) { "Google Cloud TTS가 빈 오디오를 반환했습니다." }
+        require(CloudAudioValidator.isValid(bytes, request.format)) { "Google Cloud TTS가 비어 있거나 손상된 오디오를 반환했습니다." }
         cache.writeAtomically(key, bytes)
         return CachedAudio(bytes, key, false)
+    }
+}
+
+object CloudAudioValidator {
+    fun isValid(bytes: ByteArray, format: String): Boolean {
+        if (bytes.size < 4) return false
+        if (!format.equals("MP3", true)) return true
+        val id3 = bytes[0] == 'I'.code.toByte() && bytes[1] == 'D'.code.toByte() && bytes[2] == '3'.code.toByte()
+        val frame = bytes[0].toInt() and 0xff == 0xff && bytes[1].toInt() and 0xe0 == 0xe0
+        return id3 || frame
+    }
+}
+
+sealed class CloudTtsFailure(message: String) : Exception(message) {
+    class CacheCorrupt : CloudTtsFailure("저장된 오디오가 손상되어 삭제했습니다. 다시 합성하려면 API 키를 저장하거나 휴대폰 TTS로 전환하세요.")
+}
+
+enum class CloudFailureKind { AUTH, QUOTA, NETWORK, PLAYBACK, OTHER }
+data class CloudFailure(val kind: CloudFailureKind, val guidance: String)
+object CloudFailureClassifier {
+    fun http(status: Int) = when (status) { 401, 403 -> CloudFailureKind.AUTH; 429 -> CloudFailureKind.QUOTA; else -> CloudFailureKind.OTHER }
+    fun network() = CloudFailure(CloudFailureKind.NETWORK, "네트워크를 확인하거나 캐시된 문장/휴대폰 TTS를 사용하세요.")
+    fun playback() = CloudFailure(CloudFailureKind.PLAYBACK, "오디오를 다시 합성하거나 휴대폰 TTS로 전환하세요.")
+}
+
+class CloudPrefetchPlanner(private val maxAhead: Int = 2) {
+    private var context: String? = null
+    private var generation = 0L
+    fun plan(sentences: List<String>, current: Int): List<String> = sentences.drop(current + 1).distinct().take(maxAhead.coerceIn(1, 3))
+    fun contextToken(documentId: String, voiceId: String): Long {
+        val next = "$documentId\u0000$voiceId"
+        if (next != context) { context = next; generation++ }
+        return generation
     }
 }

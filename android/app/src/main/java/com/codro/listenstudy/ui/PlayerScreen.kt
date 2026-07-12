@@ -851,7 +851,7 @@ private fun CloudSettingsSheet(
             }
             item {
                 Text("로컬 캐시: ${cacheFiles}개 · ${formatCacheBytes(cacheBytes)}", fontWeight = FontWeight.Bold)
-                Text("캐시가 있으면 API 키와 네트워크 없이 재생합니다. 배속은 기기에서 적용되어 같은 MP3를 재사용합니다.", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
+                Text("캐시가 있으면 API 키와 네트워크 없이 재생합니다. 최대 128 MB에서 오래 사용하지 않은 파일부터 자동 정리합니다. 다음 문장은 재생 중에만 제한적으로 준비되며 문서/음성 변경 시 취소됩니다. 배터리가 부족하면 휴대폰 TTS를 사용하세요.", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     TinyOutlinedButton("캐시 삭제", onClearCache, Modifier.weight(1f))
                     TinyButton("클라우드 미리듣기", onPreview, Modifier.weight(1f))
