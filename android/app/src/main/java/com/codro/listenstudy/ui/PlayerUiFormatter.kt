@@ -14,6 +14,7 @@ data class BottomPlayerControlVisibility(
 )
 
 data class DocumentTextLayout(
+    val sentenceFontSizeSp: Int,
     val sentenceVerticalPaddingDp: Int,
     val sentenceSpacingDp: Int,
     val showCompactDiagnostics: Boolean,
@@ -21,7 +22,8 @@ data class DocumentTextLayout(
 
 object PlayerUiFormatter {
     fun documentTextLayout(): DocumentTextLayout = DocumentTextLayout(
-        sentenceVerticalPaddingDp = 3,
+        sentenceFontSizeSp = 15,
+        sentenceVerticalPaddingDp = 2,
         sentenceSpacingDp = 0,
         showCompactDiagnostics = false,
     )

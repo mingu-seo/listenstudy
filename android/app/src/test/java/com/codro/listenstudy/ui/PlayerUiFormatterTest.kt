@@ -48,7 +48,8 @@ class PlayerUiFormatterTest {
     fun `document text layout uses compact sentence spacing and hides diagnostics`() {
         val layout = PlayerUiFormatter.documentTextLayout()
 
-        assertEquals(3, layout.sentenceVerticalPaddingDp)
+        assertEquals(15, layout.sentenceFontSizeSp)
+        assertEquals(2, layout.sentenceVerticalPaddingDp)
         assertEquals(0, layout.sentenceSpacingDp)
         assertEquals(false, layout.showCompactDiagnostics)
     }

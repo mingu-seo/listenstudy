@@ -1,5 +1,6 @@
 package com.codro.listenstudy.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -40,6 +41,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.codro.listenstudy.data.repository.LibraryItem
 import com.codro.listenstudy.domain.player.PlaybackStatus
 import com.codro.listenstudy.domain.tts.TtsEngineOption
@@ -74,27 +77,64 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
     val hasCloudApiKey by viewModel.hasCloudApiKey.collectAsState()
     val cloudCacheStats by viewModel.cloudCacheStats.collectAsState()
     val libraryItems by viewModel.libraryItems.collectAsState()
-    val showLibrary by viewModel.showLibrary.collectAsState()
     val listState = rememberLazyListState()
     val selectedVoiceLabel = TtsVoiceSelection.labelFor(voiceOptions, selectedVoiceId)
     val selectedEngineLabel = TtsEngineSelection.labelFor(engineOptions, selectedEnginePackageName)
     val progressPercent = PlayerUiFormatter.progressPercent(state.currentIndex, state.sentences.size)
     var controlsExpanded by rememberSaveable { mutableStateOf(false) }
     var voiceSheetVisible by rememberSaveable { mutableStateOf(false) }
-    var cloudSheetVisible by rememberSaveable { mutableStateOf(false) }
+    var navigation by remember { mutableStateOf(AppNavigation.initial()) }
     var voiceFilter by rememberSaveable { mutableStateOf(VoiceFilter.Recommended) }
     val filteredVoices = TtsVoiceSelection.filterVoices(voiceOptions, voiceFilter)
     val textFileLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) viewModel.loadTextFile(uri)
     }
 
-    if (showLibrary) {
+    if (navigation.destination == AppDestination.Library) {
+        BackHandler { navigation = navigation.navigate(AppNavigationEvent.Back) }
         LibraryScreen(
             documents = libraryItems,
-            onBackToPlayer = viewModel::openPlayer,
+            onBackToPlayer = {
+                viewModel.openPlayer()
+                navigation = navigation.navigate(AppNavigationEvent.OpenReader)
+            },
+            onOpenSettings = { navigation = navigation.navigate(AppNavigationEvent.OpenSettings) },
             onImport = { textFileLauncher.launch(arrayOf("text/plain", "text/*", "application/octet-stream")) },
-            onOpen = viewModel::openDocument,
+            onOpen = { id ->
+                viewModel.openDocument(id)
+                navigation = navigation.navigate(AppNavigationEvent.OpenReader)
+            },
             onDelete = viewModel::deleteDocument,
+        )
+        return
+    }
+
+    if (navigation.destination == AppDestination.Settings) {
+        BackHandler { navigation = navigation.navigate(AppNavigationEvent.Back) }
+        SettingsScreen(
+            mode = playbackMode,
+            selectedCloudVoiceId = cloudVoice.id,
+            hasKey = hasCloudApiKey,
+            cacheFiles = cloudCacheStats.fileCount,
+            cacheBytes = cloudCacheStats.totalBytes,
+            ttsStatus = ttsStatus,
+            engines = engineOptions,
+            selectedEnginePackageName = selectedEnginePackageName,
+            selectedEngineLabel = selectedEngineLabel,
+            voices = voiceOptions,
+            selectedVoiceId = selectedVoiceId,
+            selectedVoiceLabel = selectedVoiceLabel,
+            onBack = { navigation = navigation.navigate(AppNavigationEvent.Back) },
+            onSelectMode = viewModel::selectPlaybackMode,
+            onSelectCloudVoice = viewModel::selectCloudVoice,
+            onSaveKey = viewModel::saveCloudApiKey,
+            onDeleteKey = viewModel::deleteCloudApiKey,
+            onClearCache = viewModel::clearCloudCache,
+            onCloudPreview = viewModel::previewCloudVoice,
+            onSelectEngine = viewModel::selectEngine,
+            onSelectVoice = viewModel::selectVoice,
+            onPreviewVoice = viewModel::previewVoice,
+            onOpenTtsSettings = viewModel::openTtsSettings,
         )
         return
     }
@@ -120,7 +160,11 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
                 currentCounter = PlayerUiFormatter.sentenceCounter(state.currentIndex, state.sentences.size),
                 speedLabel = PlayerUiFormatter.speedLabel(state.speed),
                 status = state.status,
-                onOpenLibrary = viewModel::openLibrary,
+                onOpenLibrary = {
+                    viewModel.openLibrary()
+                    navigation = navigation.navigate(AppNavigationEvent.OpenLibrary)
+                },
+                onOpenSettings = { navigation = navigation.navigate(AppNavigationEvent.OpenSettings) },
                 onOpenFile = { textFileLauncher.launch(arrayOf("text/plain", "text/*", "application/octet-stream")) },
             )
 
@@ -150,12 +194,13 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
                 onSlower = viewModel::slower,
                 onFaster = viewModel::faster,
                 onChangeVoice = {
-                    if (playbackMode == PlaybackMode.ON_DEVICE) voiceSheetVisible = true else cloudSheetVisible = true
+                    if (playbackMode == PlaybackMode.ON_DEVICE) voiceSheetVisible = true
+                    else navigation = navigation.navigate(AppNavigationEvent.OpenSettings)
                 },
                 onPreviewVoice = {
                     if (playbackMode == PlaybackMode.ON_DEVICE) viewModel.previewVoice() else viewModel.previewCloudVoice()
                 },
-                onCloudSettings = { cloudSheetVisible = true },
+                onCloudSettings = { navigation = navigation.navigate(AppNavigationEvent.OpenSettings) },
             )
         }
     }
@@ -178,29 +223,13 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
             onOpenTtsSettings = viewModel::openTtsSettings,
         )
     }
-    if (cloudSheetVisible) {
-        CloudSettingsSheet(
-            mode = playbackMode,
-            selectedVoiceId = cloudVoice.id,
-            hasKey = hasCloudApiKey,
-            cacheFiles = cloudCacheStats.fileCount,
-            cacheBytes = cloudCacheStats.totalBytes,
-            ttsStatus = ttsStatus,
-            onDismiss = { cloudSheetVisible = false },
-            onSelectMode = viewModel::selectPlaybackMode,
-            onSelectVoice = viewModel::selectCloudVoice,
-            onSaveKey = viewModel::saveCloudApiKey,
-            onDeleteKey = viewModel::deleteCloudApiKey,
-            onClearCache = viewModel::clearCloudCache,
-            onPreview = viewModel::previewCloudVoice,
-        )
-    }
 }
 
 @Composable
 private fun LibraryScreen(
     documents: List<LibraryItem>,
     onBackToPlayer: () -> Unit,
+    onOpenSettings: () -> Unit,
     onImport: () -> Unit,
     onOpen: (String) -> Unit,
     onDelete: (String) -> Unit,
@@ -214,6 +243,8 @@ private fun LibraryScreen(
                     Text("최근 학습한 자료부터 표시됩니다.", color = Color(0xFF6B7280))
                 }
                 TinyOutlinedButton("플레이어", onBackToPlayer)
+                Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+                TinyOutlinedButton("설정", onOpenSettings)
                 Spacer(modifier = Modifier.padding(horizontal = 2.dp))
                 TinyButton("TXT 추가", onImport)
             }
@@ -281,6 +312,7 @@ private fun PlayerHeader(
     speedLabel: String,
     status: PlaybackStatus,
     onOpenLibrary: () -> Unit,
+    onOpenSettings: () -> Unit,
     onOpenFile: () -> Unit,
 ) {
     Column {
@@ -301,6 +333,8 @@ private fun PlayerHeader(
                 )
             }
             TinyOutlinedButton(text = "서재", onClick = onOpenLibrary)
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            TinyOutlinedButton(text = "설정", onClick = onOpenSettings)
             Spacer(modifier = Modifier.padding(horizontal = 2.dp))
             OutlinedButton(
                 onClick = onOpenFile,
@@ -364,6 +398,7 @@ private fun DocumentTextPanel(
                     DocumentSentenceLine(
                         sentence = sentence,
                         current = index == currentIndex,
+                        fontSizeSp = layout.sentenceFontSizeSp,
                         verticalPaddingDp = layout.sentenceVerticalPaddingDp,
                         onClick = { onSentenceClick(index) },
                     )
@@ -377,6 +412,7 @@ private fun DocumentTextPanel(
 private fun DocumentSentenceLine(
     sentence: String,
     current: Boolean,
+    fontSizeSp: Int,
     verticalPaddingDp: Int,
     onClick: () -> Unit,
 ) {
@@ -787,93 +823,159 @@ private fun TinyOutlinedButton(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CloudSettingsSheet(
+private fun SettingsScreen(
     mode: PlaybackMode,
-    selectedVoiceId: String,
+    selectedCloudVoiceId: String,
     hasKey: Boolean,
     cacheFiles: Int,
     cacheBytes: Long,
     ttsStatus: String,
-    onDismiss: () -> Unit,
+    engines: List<TtsEngineOption>,
+    selectedEnginePackageName: String?,
+    selectedEngineLabel: String,
+    voices: List<TtsVoiceOption>,
+    selectedVoiceId: String?,
+    selectedVoiceLabel: String,
+    onBack: () -> Unit,
     onSelectMode: (PlaybackMode) -> Unit,
-    onSelectVoice: (String) -> Unit,
+    onSelectCloudVoice: (String) -> Unit,
     onSaveKey: (String) -> Unit,
     onDeleteKey: () -> Unit,
     onClearCache: () -> Unit,
-    onPreview: () -> Unit,
+    onCloudPreview: () -> Unit,
+    onSelectEngine: (String) -> Unit,
+    onSelectVoice: (String) -> Unit,
+    onPreviewVoice: (String) -> Unit,
+    onOpenTtsSettings: () -> Unit,
 ) {
     var keyInput by rememberSaveable { mutableStateOf("") }
     val previewFeedback = PlayerUiFormatter.cloudPreviewFeedback(ttsStatus)
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+
+    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFFF6F7FB)) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(9.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .padding(horizontal = 18.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             item {
-                Text("Google Cloud TTS 설정", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
-                Text("개인 테스트용 직접 API 키 방식입니다. 키 제한·과금·유출 책임을 확인하세요. 키는 APK에 포함되지 않고 앱 비공개 저장소에만 저장됩니다.", style = MaterialTheme.typography.bodySmall, color = Color(0xFFB45309))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TinyOutlinedButton("뒤로", onBack)
+                    Spacer(modifier = Modifier.padding(horizontal = 5.dp))
+                    Column {
+                        Text("설정", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold)
+                        Text("음성, Cloud TTS와 캐시를 관리합니다.", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
+                    }
+                }
             }
             item {
-                Text("재생 모드", fontWeight = FontWeight.Bold)
-                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                    PlaybackMode.entries.forEach { option ->
-                        FilterChip(selected = mode == option, onClick = { onSelectMode(option) }, label = { Text(option.label) })
+                Surface(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), color = Color.White) {
+                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("재생 방식", fontWeight = FontWeight.Bold)
+                        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                            PlaybackMode.entries.forEach { option ->
+                                FilterChip(selected = mode == option, onClick = { onSelectMode(option) }, label = { Text(option.label) })
+                            }
+                        }
+                    }
+                }
+            }
+            item {
+                Surface(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), color = Color.White) {
+                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                        Text("휴대폰 TTS", fontWeight = FontWeight.Bold)
+                        Text("엔진: $selectedEngineLabel", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text("목소리: $selectedVoiceLabel", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        if (engines.isNotEmpty()) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                                engines.take(3).forEach { engine ->
+                                    FilterChip(
+                                        selected = engine.packageName == selectedEnginePackageName,
+                                        onClick = { onSelectEngine(engine.packageName) },
+                                        label = { Text(engine.label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                                    )
+                                }
+                            }
+                        }
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            TinyOutlinedButton("휴대폰 설정", onOpenTtsSettings, Modifier.weight(1f))
+                            TinyOutlinedButton(
+                                "목소리 미리듣기",
+                                { selectedVoiceId?.let(onPreviewVoice) },
+                                Modifier.weight(1f),
+                            )
+                        }
+                        if (voices.isNotEmpty()) {
+                            Text("상세 목소리 선택은 읽기 화면의 플레이어에서 이용할 수 있습니다.", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
+                        }
                     }
                 }
             }
             if (mode != PlaybackMode.ON_DEVICE) {
                 item {
-                    Text("한국어 음성", fontWeight = FontWeight.Bold)
-                    Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                        CloudVoiceCatalog.forMode(mode).forEach { voice ->
-                            FilterChip(selected = selectedVoiceId == voice.id, onClick = { onSelectVoice(voice.id) }, label = { Text(voice.id.takeLast(1)) })
+                    Surface(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), color = Color.White) {
+                        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                            Text("Cloud 음성", fontWeight = FontWeight.Bold)
+                            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                                CloudVoiceCatalog.forMode(mode).forEach { voice ->
+                                    FilterChip(
+                                        selected = selectedCloudVoiceId == voice.id,
+                                        onClick = { onSelectCloudVoice(voice.id) },
+                                        label = { Text(voice.id.takeLast(1)) },
+                                    )
+                                }
+                            }
+                            Text(CloudVoiceCatalog.voices.firstOrNull { it.id == selectedCloudVoiceId }?.label.orEmpty(), style = MaterialTheme.typography.bodySmall)
+                            TinyOutlinedButton("Cloud 음성 미리듣기", onCloudPreview, Modifier.fillMaxWidth())
                         }
                     }
-                    Text(CloudVoiceCatalog.voices.firstOrNull { it.id == selectedVoiceId }?.label.orEmpty(), style = MaterialTheme.typography.bodySmall)
                 }
             }
             item {
-                Text("API 키: ${if (hasKey) "설정됨" else "설정되지 않음"}", fontWeight = FontWeight.Bold)
-                OutlinedTextField(
-                    value = keyInput,
-                    onValueChange = { keyInput = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text(if (hasKey) "새 키로 교체" else "Google Cloud API 키") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    singleLine = true,
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    TinyButton("저장/교체", { onSaveKey(keyInput); keyInput = "" }, Modifier.weight(1f))
-                    TinyOutlinedButton("키 삭제", onDeleteKey, Modifier.weight(1f))
+                Surface(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), color = Color.White) {
+                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                        Text("Google Cloud TTS", fontWeight = FontWeight.Bold)
+                        Text("API 키: ${if (hasKey) "설정됨" else "설정되지 않음"}", style = MaterialTheme.typography.bodyMedium)
+                        Text("개인 테스트용 직접 API 키 방식입니다. 키는 APK에 포함되지 않고 앱 비공개 저장소에만 저장됩니다.", style = MaterialTheme.typography.bodySmall, color = Color(0xFFB45309))
+                        OutlinedTextField(
+                            value = keyInput,
+                            onValueChange = { keyInput = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            label = { Text(if (hasKey) "새 키로 교체" else "Google Cloud API 키") },
+                            visualTransformation = PasswordVisualTransformation(),
+                            singleLine = true,
+                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            TinyButton("저장/교체", { onSaveKey(keyInput); keyInput = "" }, Modifier.weight(1f))
+                            TinyOutlinedButton("키 삭제", onDeleteKey, Modifier.weight(1f))
+                        }
+                    }
                 }
             }
             item {
-                Text("로컬 캐시: ${cacheFiles}개 · ${formatCacheBytes(cacheBytes)}", fontWeight = FontWeight.Bold)
-                Text("캐시가 있으면 API 키와 네트워크 없이 재생합니다. 최대 128 MB에서 오래 사용하지 않은 파일부터 자동 정리합니다. 다음 문장은 재생 중에만 제한적으로 준비되며 문서/음성 변경 시 취소됩니다. 배터리가 부족하면 휴대폰 TTS를 사용하세요.", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    TinyOutlinedButton("캐시 삭제", onClearCache, Modifier.weight(1f))
-                    TinyButton("클라우드 미리듣기", onPreview, Modifier.weight(1f))
+                Surface(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), color = Color.White) {
+                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                        Text("로컬 캐시", fontWeight = FontWeight.Bold)
+                        Text("${cacheFiles}개 · ${formatCacheBytes(cacheBytes)} / 최대 128 MB")
+                        Text("캐시가 있으면 API 키와 네트워크 없이 재생합니다. 오래 사용하지 않은 파일부터 자동 정리됩니다.", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
+                        TinyOutlinedButton("캐시 전체 삭제", onClearCache, Modifier.fillMaxWidth())
+                        if (previewFeedback.inProgress) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(10.dp),
+                            color = if (previewFeedback.isError) Color(0xFFFFE4E6) else Color(0xFFEFF6FF),
+                        ) {
+                            Text(
+                                text = previewFeedback.message,
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = if (previewFeedback.isError) Color(0xFFBE123C) else Color(0xFF1D4ED8),
+                            )
+                        }
+                    }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                if (previewFeedback.inProgress) {
-                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    Spacer(modifier = Modifier.height(6.dp))
-                }
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    color = if (previewFeedback.isError) Color(0xFFFFE4E6) else Color(0xFFEFF6FF),
-                ) {
-                    Text(
-                        text = previewFeedback.message,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = if (previewFeedback.isError) Color(0xFFBE123C) else Color(0xFF1D4ED8),
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
