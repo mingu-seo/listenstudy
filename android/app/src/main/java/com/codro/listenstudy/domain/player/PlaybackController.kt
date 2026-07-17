@@ -20,7 +20,7 @@ class PlaybackController(
         val sentence = _state.value.currentSentence ?: return
         playAttemptGeneration += 1
         _state.update { it.copy(status = PlaybackStatus.Playing) }
-        speak(sentence, utteranceIdFor(_state.value.currentIndex), _state.value.speed)
+        speak(sentence.trim(), utteranceIdFor(_state.value.currentIndex), _state.value.speed)
     }
 
     fun pause() {

@@ -25,16 +25,17 @@ class LibraryMapperTest {
     }
 
     @Test
-    fun `playback position starts at zero percent and handles zero or one sentence`() {
+    fun `display progress counts the current sentence consistently with the reader`() {
         fun item(count: Int, index: Int) = LibraryMapper.toLibraryItem(
             StoredDocument("id", "title", null, count, index, 1f, 1, 1),
         )
 
-        assertEquals(0, item(4, 0).progressPercent)
+        assertEquals(25, item(4, 0).progressPercent)
+        assertEquals(43, item(7, 2).progressPercent)
         assertEquals("위치 1 / 4", item(4, 0).progressLabel)
         assertEquals(0, item(0, 0).progressPercent)
         assertEquals("위치 0 / 0", item(0, 0).progressLabel)
-        assertEquals(0, item(1, 0).progressPercent)
+        assertEquals(100, item(1, 0).progressPercent)
         assertEquals("위치 1 / 1", item(1, 0).progressLabel)
     }
 

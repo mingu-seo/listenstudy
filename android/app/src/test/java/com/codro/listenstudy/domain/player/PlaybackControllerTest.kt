@@ -7,6 +7,19 @@ import org.junit.Test
 
 class PlaybackControllerTest {
     @Test
+    fun play_speaks_sentence_content_without_source_layout_whitespace() = runTest {
+        val spoken = mutableListOf<String>()
+        val controller = PlaybackController(
+            sentences = listOf("\n\n  새 문단입니다.  "),
+            speak = { text, _, _ -> spoken += text },
+        )
+
+        controller.play()
+
+        assertEquals(listOf("새 문단입니다."), spoken)
+    }
+
+    @Test
     fun play_invokes_speaker_with_current_sentence_and_speed() = runTest {
         val spoken = mutableListOf<String>()
         val controller = PlaybackController(

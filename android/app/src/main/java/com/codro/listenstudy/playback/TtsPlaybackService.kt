@@ -36,11 +36,24 @@ class TtsPlaybackService : Service() {
     private val prefs by lazy { getSharedPreferences("cloud_tts_ui", MODE_PRIVATE) }
     private val persistence = PlaybackPersistenceCoordinator()
     private val persistenceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val persistenceQueue = Channel<PlaybackPersistenceRequest>(Channel.UNLIMITED)
+    private lateinit var writer: PlaybackPersistenceWriter
     private val commandQueue = Channel<QueuedCommand>(Channel.UNLIMITED)
     private val restoreGate = PlaybackRestoreGate()
     private var previewActive = false
-    private var lifecycleDecision = ServiceLifecycleDecision(foreground = false, sticky = false)
+    private val lifecycleGate = ServiceLifecycleGate()
+    private val producerGate = PersistenceProducerGate()
+    private val terminalCompletion by lazy {
+        TerminalCompletionCoordinator(
+            // Route the final save through the same serialized writer and await its barrier, so every
+            // earlier queued save commits first and the completed position is written last.
+            persist = { request -> writer.barrier(request) },
+            stop = {
+                // Terminal shutdown must REMOVE the stale notification, not merely detach it.
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            },
+        )
+    }
 
     private data class QueuedCommand(
         val command: ServiceCommand,
@@ -73,20 +86,34 @@ class TtsPlaybackService : Service() {
         cloud.setOnDoneListener(::onSpeechDone)
         val playbackError = PlaybackErrorCoordinator {
             previewActive = false
+            // Playback stopped here, so queued prefetch for sentences ahead is now speculative work
+            // for a document nobody is listening to. onPlaybackError only pauses state; unlike pause
+            // it does not run stopSpeaking, so nothing else would invalidate it.
+            cloud.cancelPrefetch()
             session.onPlaybackError()
             applyLifecyclePolicy(session.state.value.status)
         }
         local.setOnErrorListener(playbackError::onError)
         cloud.setOnErrorListener(playbackError::onError)
+        // The pause path above already stopped on the failed sentence; this only decides where the
+        // classified report belongs. A failed settings preview must never raise a recovery panel on
+        // the reader, whose buttons would act on a sentence the user was not listening to.
+        cloud.setOnCloudErrorListener { utteranceId, report ->
+            when (CloudErrorRouter.route(utteranceId, mutableUi.value.playbackMode)) {
+                CloudErrorTarget.PreviewFeedback ->
+                    update { copy(ttsStatus = CloudErrorRouter.previewFailureMessage(report)) }
+                CloudErrorTarget.CurrentSentence -> update { copy(cloudError = report) }
+                CloudErrorTarget.Ignore -> Unit
+            }
+        }
         local.initialize()
         setupMediaSession()
-        persistenceScope.launch {
-            for (request in persistenceQueue) {
-                runCatching { library.savePlayback(request.documentId, request.index, request.speed) }
-                    .onSuccess { persistence.saved(request) }
-            }
-            db.close()
-        }
+        writer = PlaybackPersistenceWriter(
+            scope = persistenceScope,
+            write = { request -> library.savePlayback(request.documentId, request.index, request.speed) },
+            onSaved = { request -> persistence.saved(request) },
+            onDrained = { db.close() },
+        )
         scope.launch {
             for (queued in commandQueue) executeSerialized(queued)
         }
@@ -142,6 +169,20 @@ class TtsPlaybackService : Service() {
 
     private fun execute(command: ServiceCommand) {
         if (command is ServiceCommand.ReplaceDocument) restoreGate.contentChanged()
+        // Cleared at ACCEPTANCE, not when the command runs: the panel must go the moment the user acts,
+        // and a stale panel must never outlive the attempt it described.
+        if (CloudErrorUiPolicy.clearsCloudError(command) && mutableUi.value.cloudError != null) {
+            update { copy(cloudError = null) }
+        }
+        // Invalidate any pending terminal finalization at ACCEPTANCE time (main thread), before the
+        // command is serialized — otherwise the terminal continuation could stopSelf() first. Bumping
+        // the generation now guarantees a stale finalizer sees it and skips stop; re-enabling the gate
+        // and reopening the producer readies the revived session.
+        if (command.revivesPlayback()) {
+            terminalCompletion.invalidate()
+            lifecycleGate.reset()
+            producerGate.revive()
+        }
         commandQueue.trySend(QueuedCommand(command))
     }
 
@@ -176,11 +217,57 @@ class TtsPlaybackService : Service() {
                     local.speak("안녕하세요. 이 목소리로 학습 자료를 읽어드립니다.", LOCAL_PREVIEW_ID)
                 }
             }
-            is ServiceCommand.SelectPlaybackMode->{session.execute(PlaybackSessionCommand.Pause);val voice=CloudVoiceCatalog.resolveForMode(command.mode,mutableUi.value.cloudVoice.id);prefs.edit().putString("mode",command.mode.name).putString("voice",voice.id).apply();update{copy(playbackMode=command.mode,cloudVoice=voice,ttsStatus="재생 모드: ${command.mode.label}")}}
+            is ServiceCommand.SelectPlaybackMode->{session.execute(PlaybackSessionCommand.Pause);applyPlaybackMode(command.mode)}
             is ServiceCommand.SelectCloudVoice->{val voice=CloudVoiceCatalog.resolveForMode(mutableUi.value.playbackMode,command.voiceId);prefs.edit().putString("voice",voice.id).apply();update{copy(cloudVoice=voice)}}
-            is ServiceCommand.SaveApiKey->{if(command.value.isBlank())update{copy(ttsStatus="입력한 API 키가 비어 있습니다.")}else{settings.saveApiKey(command.value);update{copy(hasCloudApiKey=true,ttsStatus="Google Cloud API 키를 비공개 앱 저장소에 저장했습니다.")}}}
-            ServiceCommand.DeleteApiKey->{settings.deleteApiKey();update{copy(hasCloudApiKey=false,ttsStatus="Google Cloud API 키를 삭제했습니다.")}}
+            is ServiceCommand.SaveApiKey -> {
+                // Keystore + SharedPreferences commits are blocking disk I/O and must not run on the
+                // main thread. Suspending here keeps the command queue serialized (the next command
+                // waits) while the work itself happens on the IO dispatcher; the key never leaves
+                // this block. The result is published only once the save (or blank rejection) has
+                // actually resolved, and always stamped with this request's id, so the UI can tell
+                // this outcome apart from a previous one.
+                val isBlank = command.value.isBlank()
+                val attempt = withContext(Dispatchers.IO) {
+                    val saved = !isBlank && settings.saveApiKey(command.value)
+                    saved to settings.hasApiKey()
+                }
+                val resolution = CloudKeySavePolicy.resolve(command.requestId, isBlank, attempt.first)
+                update {
+                    copy(
+                        hasCloudApiKey = attempt.second,
+                        cloudKeySaveResult = resolution.result,
+                        ttsStatus = resolution.message,
+                    )
+                }
+            }
+            ServiceCommand.DeleteApiKey -> {
+                // Deletion touches the same secure storage, so it is subject to the same rule.
+                val outcome = withContext(Dispatchers.IO) {
+                    val deleted = settings.deleteApiKey()
+                    deleted to settings.hasApiKey()
+                }
+                update {
+                    copy(
+                        hasCloudApiKey = outcome.second,
+                        ttsStatus = if (outcome.first) "Google Cloud API 키를 삭제했습니다."
+                        else "API 키를 완전히 삭제하지 못했습니다. 다시 시도해 주세요.",
+                    )
+                }
+            }
             ServiceCommand.ClearCache->{session.execute(PlaybackSessionCommand.Pause);cloud.clearCache();update{copy(cloudCacheStats=cloud.stats(),ttsStatus="클라우드 음성 캐시를 삭제했습니다.")}}
+            // Explicit, user-initiated retry of the SAME sentence. Deliberately not automatic: a retry
+            // is a billed request, and only the user can know whether the failure has been addressed.
+            ServiceCommand.RetryCloudSentence -> session.execute(PlaybackSessionCommand.Play)
+            ServiceCommand.UseOnDeviceVoiceForCurrentSentence -> {
+                // Cancel the in-flight cloud request first so the abandoned synthesis cannot fire a
+                // late error against the local playback that is about to start.
+                cloud.stop()
+                applyPlaybackMode(CloudErrorUiPolicy.ON_DEVICE_FALLBACK)
+                // Position is untouched, so this resumes the sentence that failed.
+                session.execute(PlaybackSessionCommand.Play)
+            }
+            // The panel is already cleared at acceptance; nothing else to undo.
+            ServiceCommand.DismissCloudError -> Unit
             ServiceCommand.PreviewCloudVoice -> {
                 session.execute(PlaybackSessionCommand.Pause)
                 previewActive = true
@@ -193,8 +280,23 @@ class TtsPlaybackService : Service() {
         }
     }
     private fun update(block:PlaybackServiceUiState.()->PlaybackServiceUiState){mutableUi.value=mutableUi.value.block()}
+
+    /**
+     * Selects the playback mode and the voice that mode supports, persisting both. Shared by an
+     * explicit mode change and the error panel's phone-voice fallback so the two cannot drift.
+     */
+    private fun applyPlaybackMode(mode: PlaybackMode) {
+        val voice = CloudVoiceCatalog.resolveForMode(mode, mutableUi.value.cloudVoice.id)
+        prefs.edit().putString("mode", mode.name).putString("voice", voice.id).apply()
+        update { copy(playbackMode = mode, cloudVoice = voice, ttsStatus = "재생 모드: ${mode.label}") }
+    }
     private fun enqueuePersistence(request: PlaybackPersistenceRequest) {
-        persistenceQueue.trySend(request)
+        // Gate out delayed/debounced producer writes once terminal finalization has begun, so nothing
+        // enqueues behind the terminal barrier and overwrites the final position.
+        if (!producerGate.accept()) return
+        // submit() returns false only when the writer is closed (service terminating/destroyed); the
+        // terminal barrier already persisted the final position, so a dropped late save is expected.
+        writer.submit(request)
     }
     private fun flushPersistence() {
         persistence.observe(mutableUi.value.documentId, session.state.value)
@@ -214,32 +316,112 @@ class TtsPlaybackService : Service() {
     }
 
     private fun applyLifecyclePolicy(status: PlaybackStatus) {
-        val next = PlaybackServiceLifecyclePolicy.decide(status, previewActive)
-        if (next == lifecycleDecision) return
-        lifecycleDecision = next
-        if (next.foreground) {
-            startAsForeground(mutableUi.value)
-        } else {
-            stopForeground(STOP_FOREGROUND_DETACH)
+        // Gate deduplicates non-terminal transitions but always lets the terminal stop through, even
+        // though Paused/Idle/Completed share the same ServiceLifecycleDecision(false, false).
+        when (lifecycleGate.next(status, previewActive) ?: return) {
+            ServiceLifecycleAction.StartForeground -> {
+                startAsForeground(mutableUi.value)
+                syncStartMode()
+            }
+            ServiceLifecycleAction.ReleaseForegroundAndSync -> {
+                stopForeground(STOP_FOREGROUND_DETACH)
+                syncStartMode()
+            }
+            // Final sentence finished: persist the completed position, then release foreground and
+            // terminate. Never re-start the service in the background — doing so violates Android
+            // background-start rules and Samsung Device Care reports it as an abnormal termination
+            // while the screen is locked.
+            ServiceLifecycleAction.StopService -> finalizeCompletion()
         }
+    }
+
+    private fun finalizeCompletion() {
+        // Close the producer gate synchronously so no debounced save can enqueue behind the barrier.
+        producerGate.beginTerminal()
+        // Capture the generation token synchronously at completion detection; a revival accepted after
+        // this point bumps the generation and the stale finalizer will skip stop.
+        val token = terminalCompletion.begin() ?: return
+        val snapshot = run {
+            persistence.observe(mutableUi.value.documentId, session.state.value)
+            persistence.snapshotForFlush()
+        }
+        scope.launch { terminalCompletion.finalize(token, snapshot) }
+    }
+
+    /** Commands that resume/replace playback (or start a preview) after a completion, invalidating any pending finalization. */
+    private fun ServiceCommand.revivesPlayback(): Boolean = when (this) {
+        is ServiceCommand.Play,
+        is ServiceCommand.Previous,
+        is ServiceCommand.Next,
+        is ServiceCommand.Jump,
+        is ServiceCommand.ReplaceDocument,
+        is ServiceCommand.PreviewLocalVoice,
+        is ServiceCommand.PreviewCloudVoice,
+        // Both resume playback, so a pending terminal finalization must not stop the service first.
+        is ServiceCommand.RetryCloudSentence,
+        is ServiceCommand.UseOnDeviceVoiceForCurrentSentence -> true
+        else -> false
+    }
+
+    private fun syncStartMode() {
         startService(Intent(this, TtsPlaybackService::class.java).setAction(ACTION_SYNC_START_MODE))
     }
 
     private fun setupMediaSession(){mediaSession=MediaSessionCompat(this,"ListenStudyMediaSession").apply{setCallback(object:MediaSessionCompat.Callback(){override fun onPlay()=execute(ServiceCommand.Play);override fun onPause()=execute(ServiceCommand.Pause);override fun onSkipToPrevious()=execute(ServiceCommand.Previous);override fun onSkipToNext()=execute(ServiceCommand.Next)});isActive=true}}
     private fun labels(ui:PlaybackServiceUiState):Pair<String,String>{val s=when(ui.playback.status){PlaybackStatus.Playing->"재생 중";PlaybackStatus.Paused->"일시정지";PlaybackStatus.Completed->"완료";PlaybackStatus.Idle->"대기 중"};return s to "${if(ui.playback.sentences.isEmpty())0 else ui.playback.currentIndex+1}/${ui.playback.sentences.size} · ${ui.playback.speed}x"}
-    private fun updateMediaSession(ui:PlaybackServiceUiState){val(s,p)=labels(ui);val ps=when(ui.playback.status){PlaybackStatus.Playing->PlaybackStateCompat.STATE_PLAYING;PlaybackStatus.Paused->PlaybackStateCompat.STATE_PAUSED;PlaybackStatus.Completed->PlaybackStateCompat.STATE_STOPPED;else->PlaybackStateCompat.STATE_NONE};mediaSession?.setPlaybackState(PlaybackStateCompat.Builder().setActions(PlaybackStateCompat.ACTION_PLAY or PlaybackStateCompat.ACTION_PAUSE or PlaybackStateCompat.ACTION_PLAY_PAUSE or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or PlaybackStateCompat.ACTION_SKIP_TO_NEXT).setState(ps,PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN,1f).build());mediaSession?.setMetadata(MediaMetadataCompat.Builder().putString(MediaMetadataCompat.METADATA_KEY_TITLE,ui.documentTitle).putString(MediaMetadataCompat.METADATA_KEY_ARTIST,"ListenStudy").putString(MediaMetadataCompat.METADATA_KEY_ALBUM,p.ifBlank{s}).build())}
+    private fun updateMediaSession(ui: PlaybackServiceUiState) {
+        val (statusLabel, progressLabel) = labels(ui)
+        val playbackState = when (ui.playback.status) {
+            PlaybackStatus.Playing -> PlaybackStateCompat.STATE_PLAYING
+            PlaybackStatus.Paused -> PlaybackStateCompat.STATE_PAUSED
+            PlaybackStatus.Completed -> PlaybackStateCompat.STATE_STOPPED
+            PlaybackStatus.Idle -> PlaybackStateCompat.STATE_NONE
+        }
+        val timeline = MediaSessionTimeline.from(
+            sentences = ui.playback.sentences,
+            currentIndex = ui.playback.currentIndex,
+            completed = ui.playback.status == PlaybackStatus.Completed,
+        )
+        val playbackSpeed = if (ui.playback.status == PlaybackStatus.Playing) ui.playback.speed else 0f
+
+        mediaSession?.setPlaybackState(
+            PlaybackStateCompat.Builder()
+                .setActions(
+                    PlaybackStateCompat.ACTION_PLAY or
+                        PlaybackStateCompat.ACTION_PAUSE or
+                        PlaybackStateCompat.ACTION_PLAY_PAUSE or
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT,
+                )
+                .setState(playbackState, timeline.positionMs, playbackSpeed)
+                .build(),
+        )
+        mediaSession?.setMetadata(
+            MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, ui.documentTitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "ListenStudy")
+                .putString(
+                    MediaMetadataCompat.METADATA_KEY_ALBUM,
+                    progressLabel.ifBlank { statusLabel },
+                )
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, timeline.durationMs)
+                .build(),
+        )
+    }
     private fun buildNotification(ui:PlaybackServiceUiState):Notification{val(s,p)=labels(ui);val open=PendingIntent.getActivity(this,0,Intent(this,MainActivity::class.java).apply{flags=Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP},pendingFlags());return NotificationCompat.Builder(this,CHANNEL_ID).setSmallIcon(R.drawable.ic_stat_listenstudy).setContentTitle(ui.documentTitle).setContentText(PlaybackNotificationFormatter.mediaSubtitle(s,p)).setSubText(p).setStyle(MediaStyle().setMediaSession(mediaSession?.sessionToken).setShowActionsInCompactView(0,1,2)).setContentIntent(open).setOngoing(ui.playback.status==PlaybackStatus.Playing).setSilent(true).setOnlyAlertOnce(true).setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setCategory(NotificationCompat.CATEGORY_TRANSPORT).setPriority(NotificationCompat.PRIORITY_LOW).addAction(R.drawable.ic_skip_previous,"이전",commandIntent(PlaybackServiceCommand.ACTION_PREVIOUS,1)).addAction(if(ui.playback.status==PlaybackStatus.Playing)R.drawable.ic_pause else R.drawable.ic_play,PlaybackNotificationFormatter.playPauseLabel(s),commandIntent(PlaybackServiceCommand.ACTION_PLAY_PAUSE,2)).addAction(R.drawable.ic_skip_next,"다음",commandIntent(PlaybackServiceCommand.ACTION_NEXT,3)).build()}
     private fun startAsForeground(ui:PlaybackServiceUiState){val n=buildNotification(ui);if(Build.VERSION.SDK_INT>=29)ServiceCompat.startForeground(this,NOTIFICATION_ID,n,ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)else startForeground(NOTIFICATION_ID,n)}
     private fun commandIntent(action:String,code:Int)=PendingIntent.getService(this,code,Intent(this,TtsPlaybackService::class.java).setAction(action),pendingFlags())
     private fun pendingFlags()=PendingIntent.FLAG_UPDATE_CURRENT or if(Build.VERSION.SDK_INT>=23)PendingIntent.FLAG_IMMUTABLE else 0
     private fun notificationManager()=getSystemService(NotificationManager::class.java)
     private fun createNotificationChannel(){if(Build.VERSION.SDK_INT>=26)notificationManager().createNotificationChannel(NotificationChannel(CHANNEL_ID,"ListenStudy 재생",NotificationManager.IMPORTANCE_LOW).apply{description="ListenStudy 백그라운드 TTS 재생 알림";setShowBadge(false)})}
-    override fun onDestroy(){flushPersistence();persistenceQueue.close();PlaybackServiceConnection.detach(owner);scope.cancel();session.stop();local.shutdown();cloud.shutdown();mediaSession?.run{isActive=false;release()};mediaSession=null;super.onDestroy()}
+    override fun onDestroy(){flushPersistence();writer.close();PlaybackServiceConnection.detach(owner);scope.cancel();session.stop();local.shutdown();cloud.shutdown();mediaSession?.run{isActive=false;release()};mediaSession=null;super.onDestroy()}
     companion object {
         private const val CHANNEL_ID = "listenstudy_playback"
         private const val NOTIFICATION_ID = 1001
         private const val LOCAL_PREVIEW_ID = "listenstudy_voice_preview"
-        private const val CLOUD_PREVIEW_ID = "listenstudy_cloud_preview"
+        // Bound to the router's constant: if these two ever drift, preview failures silently start
+        // raising recovery panels on the reader again.
+        private const val CLOUD_PREVIEW_ID = CloudErrorRouter.CLOUD_PREVIEW_UTTERANCE_ID
         private const val ACTION_SYNC_START_MODE = "com.codro.listenstudy.action.SYNC_START_MODE"
 
         fun start(context: Context) {

@@ -13,8 +13,8 @@ android {
         applicationId = "com.codro.listenstudy"
         minSdk = 26
         targetSdk = 35
-        versionCode = 29
-        versionName = "0.10.1-settings-reader-ui"
+        versionCode = 36
+        versionName = "0.12.0-byok-setup-wizard"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

@@ -28,12 +28,21 @@ class KoreanRuleBasedSentenceSplitter : SentenceSplitter {
                 val trailingSpaces = raw.length - raw.indexOfLast { !it.isWhitespace() } - 1
                 result += SentenceSpan(
                     index = index++,
-                    text = trimmed,
+                    // Keep the exact source segment for the reader UI. Playback trims only
+                    // the outer layout whitespace immediately before sending text to TTS.
+                    text = raw,
                     startOffset = start + leadingSpaces,
                     endOffset = endExclusive - trailingSpaces,
                 )
+                start = endExclusive
+            } else if (endExclusive == text.length && result.isNotEmpty()) {
+                // A source that ends in blank lines has no following sentence to own them.
+                // Keep those characters on the final segment instead of dropping them.
+                result[result.lastIndex] = result.last().copy(text = result.last().text + raw)
+                start = endExclusive
             }
-            start = endExclusive
+            // For whitespace-only separators between sentences, keep `start` unchanged so
+            // the next non-empty source segment includes every original line break.
         }
 
         while (i < text.length) {

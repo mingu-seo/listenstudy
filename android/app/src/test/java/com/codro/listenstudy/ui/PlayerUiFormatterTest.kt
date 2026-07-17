@@ -1,5 +1,6 @@
 package com.codro.listenstudy.ui
 
+import com.codro.listenstudy.domain.tts.PlaybackMode
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,12 +12,12 @@ class PlayerUiFormatterTest {
     }
 
     @Test
-    fun `progress percent uses playback position and clamps bounds`() {
-        assertEquals(33, PlayerUiFormatter.progressPercent(currentIndex = 2, total = 7))
+    fun `progress percent counts the current sentence and clamps bounds`() {
+        assertEquals(43, PlayerUiFormatter.progressPercent(currentIndex = 2, total = 7))
         assertEquals(100, PlayerUiFormatter.progressPercent(currentIndex = 10, total = 7))
-        assertEquals(0, PlayerUiFormatter.progressPercent(currentIndex = 0, total = 7))
+        assertEquals(14, PlayerUiFormatter.progressPercent(currentIndex = 0, total = 7))
         assertEquals(0, PlayerUiFormatter.progressPercent(currentIndex = 0, total = 0))
-        assertEquals(0, PlayerUiFormatter.progressPercent(currentIndex = 0, total = 1))
+        assertEquals(100, PlayerUiFormatter.progressPercent(currentIndex = 0, total = 1))
     }
 
     @Test
@@ -45,11 +46,12 @@ class PlayerUiFormatterTest {
     }
 
     @Test
-    fun `document text layout uses compact sentence spacing and hides diagnostics`() {
+    fun `document text layout keeps source text vertically compact and hides diagnostics`() {
         val layout = PlayerUiFormatter.documentTextLayout()
 
         assertEquals(15, layout.sentenceFontSizeSp)
-        assertEquals(2, layout.sentenceVerticalPaddingDp)
+        assertEquals(22, layout.sentenceLineHeightSp)
+        assertEquals(1, layout.sentenceVerticalPaddingDp)
         assertEquals(0, layout.sentenceSpacingDp)
         assertEquals(false, layout.showCompactDiagnostics)
     }
@@ -62,5 +64,23 @@ class PlayerUiFormatterTest {
 
         assertEquals(false, feedback.inProgress)
         assertEquals(true, feedback.isError)
+    }
+
+    @Test
+    fun `preview feedback belongs beside the preview button only in active cloud modes`() {
+        // The panel sits directly under the cloud preview button, so it may only appear where that
+        // button does. In 휴대폰 TTS there is no cloud preview to report on.
+        assertEquals(false, PlayerUiFormatter.showsCloudPreviewFeedback(PlaybackMode.ON_DEVICE))
+        assertEquals(true, PlayerUiFormatter.showsCloudPreviewFeedback(PlaybackMode.GOOGLE_STANDARD))
+        assertEquals(true, PlayerUiFormatter.showsCloudPreviewFeedback(PlaybackMode.GOOGLE_WAVENET))
+    }
+
+    @Test
+    fun `preview feedback reports success and idle status without error styling`() {
+        val success = PlayerUiFormatter.cloudPreviewFeedback("미리듣기 재생 중")
+
+        assertEquals("미리듣기 재생 중", success.message)
+        assertEquals(false, success.inProgress)
+        assertEquals(false, success.isError)
     }
 }

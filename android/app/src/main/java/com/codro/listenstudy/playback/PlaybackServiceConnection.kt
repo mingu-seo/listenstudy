@@ -40,6 +40,21 @@ class PlaybackServiceFacade(private val maxPending: Int = 32) {
     }
 }
 
+/**
+ * Restarts a service that may have been reclaimed while playback was paused,
+ * then dispatches the UI command. A disconnected facade keeps the command
+ * queued until the new service instance attaches.
+ */
+class PlaybackCommandDispatcher(
+    private val ensureServiceStarted: () -> Unit,
+    private val dispatch: (ServiceCommand) -> Unit,
+) {
+    fun send(command: ServiceCommand) {
+        ensureServiceStarted()
+        dispatch(command)
+    }
+}
+
 object PlaybackServiceConnection {
     private val facade = PlaybackServiceFacade()
     val uiState: StateFlow<PlaybackServiceUiState> = facade.state

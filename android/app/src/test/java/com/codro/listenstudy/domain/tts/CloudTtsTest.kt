@@ -82,20 +82,38 @@ class CloudTtsTest {
         assertEquals(CloudCacheKey.create(request.text, request.voiceId, request.format), cache.lastKey)
     }
 
-    @Test fun `http error exposes safe Google reason instead of hiding response body`() {
-        val body = """{"error":{"code":403,"message":"Requests from this Android client application are blocked."}}"""
+    @Test fun `http error body is reduced to a classification hint that never reaches the user`() {
+        // Previously this body was formatted straight into the user's status line. Google error text
+        // is English, quotes the request, and can echo a misplaced API key, so it is now kept as a
+        // classification input only and the user sees CloudTtsErrorPolicy's Korean copy instead.
+        val body = """{"error":{"code":403,"status":"PERMISSION_DENIED","message":"Requests from this Android client application are blocked."}}"""
 
+        val reason = CloudTtsHttpError.reason(body)
+
+        assertTrue(reason!!.contains("PERMISSION_DENIED"))
         assertEquals(
-            "Google Cloud TTS 요청 실패 (HTTP 403): Requests from this Android client application are blocked.",
-            CloudTtsHttpError.message(403, body),
+            CloudErrorCategory.PermissionRestricted,
+            CloudTtsErrorPolicy.classify(CloudTtsFailure.Http(403, reason)),
         )
     }
 
-    @Test fun `http error without Google message gives restriction guidance`() {
+    @Test fun `http error without a parsable body still classifies on its status alone`() {
+        assertNull(CloudTtsHttpError.reason("not-json"))
         assertEquals(
-            "Google Cloud TTS 요청 실패 (HTTP 400). API 활성화와 키 제한을 확인하세요.",
-            CloudTtsHttpError.message(400, "not-json"),
+            CloudErrorCategory.InvalidRequest,
+            CloudTtsErrorPolicy.classify(CloudTtsFailure.Http(400, CloudTtsHttpError.reason("not-json"))),
         )
+    }
+
+    @Test fun `a blank key fails as a typed missing-key failure rather than an argument error`() = runTest {
+        val failure = runCatching {
+            CloudCacheFirstSynthesizer(FakeCache(null), FakeRemote()).audio(
+                CloudSynthesisRequest("문장", "ko-KR-Wavenet-A", "MP3"), apiKey = " ",
+            )
+        }.exceptionOrNull()
+
+        assertTrue(failure is CloudTtsFailure.MissingApiKey)
+        assertEquals(CloudErrorCategory.AuthKeyInvalid, CloudTtsErrorPolicy.classify(failure!!))
     }
 
     private class FakeRemote : CloudTtsRemote {

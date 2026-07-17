@@ -9,12 +9,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.codro.listenstudy.data.local.ListenStudyDatabase
 import com.codro.listenstudy.data.repository.*
+import com.codro.listenstudy.playback.CloudKeySaveResult
 import com.codro.listenstudy.playback.ServiceCommand
 import com.codro.listenstudy.domain.text.KoreanRuleBasedSentenceSplitter
 import com.codro.listenstudy.domain.tts.*
 import com.codro.listenstudy.io.BoundedInputReader
 import com.codro.listenstudy.io.InputTooLargeException
 import com.codro.listenstudy.playback.PlaybackServiceConnection
+import com.codro.listenstudy.playback.PlaybackCommandDispatcher
 import com.codro.listenstudy.playback.TtsPlaybackService
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -32,6 +34,10 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     val showLibrary = _showLibrary.asStateFlow()
     private val documentLoadGuard = GenerationGuard()
     private var documentLoadJob: Job? = null
+    private val commandDispatcher = PlaybackCommandDispatcher(
+        ensureServiceStarted = { TtsPlaybackService.start(application) },
+        dispatch = PlaybackServiceConnection::dispatch,
+    )
     private val ui = PlaybackServiceConnection.uiState
     private fun <T> serviceField(block: (com.codro.listenstudy.playback.PlaybackServiceUiState) -> T) =
         ui.map(block).distinctUntilChanged().stateIn(viewModelScope, SharingStarted.Eagerly, block(ui.value))
@@ -45,7 +51,9 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     val playbackMode = serviceField { it.playbackMode }
     val cloudVoice = serviceField { it.cloudVoice }
     val hasCloudApiKey = serviceField { it.hasCloudApiKey }
+    val cloudKeySaveResult = serviceField { it.cloudKeySaveResult }
     val cloudCacheStats = serviceField { it.cloudCacheStats }
+    val cloudError = serviceField { it.cloudError }
 
     init {
         TtsPlaybackService.start(application)
@@ -120,10 +128,23 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     fun previewVoice(id: String? = selectedVoiceId.value) = send(ServiceCommand.PreviewLocalVoice(id))
     fun selectPlaybackMode(mode: PlaybackMode) = send(ServiceCommand.SelectPlaybackMode(mode))
     fun selectCloudVoice(id: String) = send(ServiceCommand.SelectCloudVoice(id))
-    fun saveCloudApiKey(value: String) = send(ServiceCommand.SaveApiKey(value))
+    /**
+     * Dispatches a key save and returns the id the service will stamp its result with, so the
+     * caller can recognise the outcome of *this* request and ignore any earlier one.
+     */
+    fun saveCloudApiKey(value: String): Long {
+        val requestId = nextSaveRequestId.incrementAndGet()
+        send(ServiceCommand.SaveApiKey(value, requestId))
+        return requestId
+    }
     fun deleteCloudApiKey() = send(ServiceCommand.DeleteApiKey)
     fun clearCloudCache() = send(ServiceCommand.ClearCache)
     fun previewCloudVoice() = send(ServiceCommand.PreviewCloudVoice)
+    /** Re-speaks the sentence that failed. User-initiated only — a retry is a billed request. */
+    fun retryCloudSentence() = send(ServiceCommand.RetryCloudSentence)
+    /** Falls back to phone TTS and continues from the sentence that failed. */
+    fun useOnDeviceVoiceForCurrentSentence() = send(ServiceCommand.UseOnDeviceVoiceForCurrentSentence)
+    fun dismissCloudError() = send(ServiceCommand.DismissCloudError)
     fun persistNow() { /* Service persists independently. */ }
     fun openTtsSettings() {
         runCatching {
@@ -135,15 +156,21 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
     private fun send(command: ServiceCommand) {
-        // The ViewModel starts the service once in init. Commands then stay in-process;
-        // the running service promotes itself only for playback/preview transitions.
-        PlaybackServiceConnection.dispatch(command)
+        commandDispatcher.send(command)
     }
     private fun applySavedDocument(d: SavedDocument) { send(ServiceCommand.ReplaceDocument(d.documentId,d.title,d.sentences,d.index,d.speed)); _showLibrary.value=false }
     private fun replaceSample() = send(ServiceCommand.ReplaceDocument(null,"샘플 학습 자료",splitter.split(sampleText).map{it.text}))
     private fun beginDocumentLoad():Long { documentLoadJob?.cancel(); return documentLoadGuard.next() }
     override fun onCleared() { database.close(); super.onCleared() }
-    private companion object { const val MAX_TEXT_FILE_BYTES=10*1024*1024; const val ACTION_TTS_SETTINGS="com.android.settings.TTS_SETTINGS" }
+    private companion object {
+        const val MAX_TEXT_FILE_BYTES=10*1024*1024
+        const val ACTION_TTS_SETTINGS="com.android.settings.TTS_SETTINGS"
+        /**
+         * Process-wide so ids stay unique and monotonic across ViewModel recreation, matching the
+         * lifetime of the service that reports results back. Starts at 1: 0 means "no request".
+         */
+        val nextSaveRequestId = java.util.concurrent.atomic.AtomicLong(CloudKeySaveResult.NO_REQUEST)
+    }
 }
 private fun android.content.ContentResolver.displayName(uri: Uri): String? = query(uri,arrayOf(OpenableColumns.DISPLAY_NAME),null,null,null)?.use { if(it.moveToFirst()) it.getString(0) else null }
 private fun ByteArray.decodeTextFile():String = runCatching{decodeStrict(StandardCharsets.UTF_8)}.getOrElse{decodeStrict(Charset.forName("EUC-KR"))}.replace("\uFEFF","").trim()

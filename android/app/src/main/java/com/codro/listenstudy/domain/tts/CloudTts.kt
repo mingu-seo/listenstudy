@@ -72,20 +72,21 @@ object CloudSettingsValidator {
         if (mode != PlaybackMode.ON_DEVICE && !cacheHit && apiKey.isBlank()) "Google Cloud API 키를 먼저 저장해 주세요." else null
 }
 
+/**
+ * Extracts the diagnostic fields of a Google error body for [CloudTtsErrorPolicy] to classify on.
+ *
+ * The result is a CLASSIFICATION INPUT ONLY and never user-facing: a Google error body can quote the
+ * request, and an API key pasted into the wrong Console field has been seen echoed back in it. The
+ * user-facing text is derived from the resulting [CloudErrorCategory] instead.
+ */
 object CloudTtsHttpError {
-    private val messagePattern = Regex("\\\"message\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"")
+    private val fieldPattern = Regex("\\\"(?:message|status|reason)\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"")
 
-    fun message(statusCode: Int, responseBody: String): String {
-        val reason = messagePattern.find(responseBody)?.groupValues?.getOrNull(1)
-            ?.replace("\\n", " ")
-            ?.replace("\\\"", "\"")
-            ?.take(400)
-        return if (reason.isNullOrBlank()) {
-            "Google Cloud TTS 요청 실패 (HTTP $statusCode). API 활성화와 키 제한을 확인하세요."
-        } else {
-            "Google Cloud TTS 요청 실패 (HTTP $statusCode): $reason"
-        }
-    }
+    fun reason(responseBody: String): String? = fieldPattern.findAll(responseBody)
+        .map { it.groupValues[1] }
+        .joinToString(" ")
+        .take(400)
+        .ifBlank { null }
 }
 
 interface CloudAudioCache {
@@ -106,9 +107,9 @@ class CloudCacheFirstSynthesizer(private val cache: CloudAudioCache, private val
             cache.invalidate(key)
             if (apiKey.isBlank()) throw CloudTtsFailure.CacheCorrupt()
         }
-        require(apiKey.isNotBlank()) { "Google Cloud API 키를 먼저 저장해 주세요." }
+        if (apiKey.isBlank()) throw CloudTtsFailure.MissingApiKey()
         val bytes = remote.synthesize(request, apiKey)
-        require(CloudAudioValidator.isValid(bytes, request.format)) { "Google Cloud TTS가 비어 있거나 손상된 오디오를 반환했습니다." }
+        if (!CloudAudioValidator.isValid(bytes, request.format)) throw CloudTtsFailure.InvalidAudio()
         cache.writeAtomically(key, bytes)
         return CachedAudio(bytes, key, false)
     }
@@ -124,8 +125,31 @@ object CloudAudioValidator {
     }
 }
 
+/**
+ * Synthesis failures the app raises itself, carrying enough structure for [CloudTtsErrorPolicy] to
+ * classify without any caller parsing a message string.
+ *
+ * Every [message] here is safe to surface, but callers should still present
+ * [CloudTtsErrorPolicy.report] output instead, so app-raised and Google-raised failures read the
+ * same way.
+ */
 sealed class CloudTtsFailure(message: String) : Exception(message) {
     class CacheCorrupt : CloudTtsFailure("저장된 오디오가 손상되어 삭제했습니다. 다시 합성하려면 API 키를 저장하거나 휴대폰 TTS로 전환하세요.")
+
+    class MissingApiKey : CloudTtsFailure("Google Cloud API 키를 먼저 저장해 주세요.")
+
+    /** Google returned 2xx with an empty or non-audio payload. */
+    class InvalidAudio : CloudTtsFailure("Google Cloud TTS가 비어 있거나 손상된 오디오를 반환했습니다.")
+
+    /**
+     * A non-2xx response. [reason] holds the body's diagnostic fields for classification only: it is
+     * kept out of [message] and [toString] so it cannot reach a log, a crash report or the screen —
+     * the body may quote the request and has been seen echoing a misplaced API key.
+     */
+    class Http(val statusCode: Int, internal val reason: String?) :
+        CloudTtsFailure("Google Cloud TTS 요청이 거부되었습니다.") {
+        override fun toString(): String = "CloudTtsFailure.Http(statusCode=$statusCode, reason=<redacted>)"
+    }
 }
 
 enum class CloudFailureKind { AUTH, QUOTA, NETWORK, PLAYBACK, OTHER }

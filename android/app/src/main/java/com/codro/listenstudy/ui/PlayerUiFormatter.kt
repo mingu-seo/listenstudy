@@ -1,5 +1,7 @@
 package com.codro.listenstudy.ui
 
+import com.codro.listenstudy.domain.tts.PlaybackMode
+import com.codro.listenstudy.ui.theme.QuietReaderType
 import kotlin.math.roundToInt
 
 data class CloudPreviewFeedback(
@@ -15,6 +17,7 @@ data class BottomPlayerControlVisibility(
 
 data class DocumentTextLayout(
     val sentenceFontSizeSp: Int,
+    val sentenceLineHeightSp: Int,
     val sentenceVerticalPaddingDp: Int,
     val sentenceSpacingDp: Int,
     val showCompactDiagnostics: Boolean,
@@ -22,8 +25,9 @@ data class DocumentTextLayout(
 
 object PlayerUiFormatter {
     fun documentTextLayout(): DocumentTextLayout = DocumentTextLayout(
-        sentenceFontSizeSp = 15,
-        sentenceVerticalPaddingDp = 2,
+        sentenceFontSizeSp = QuietReaderType.ReaderFontSizeSp,
+        sentenceLineHeightSp = QuietReaderType.ReaderLineHeightSp,
+        sentenceVerticalPaddingDp = 1,
         sentenceSpacingDp = 0,
         showCompactDiagnostics = false,
     )
@@ -40,18 +44,20 @@ object PlayerUiFormatter {
         return "현재 문장 $current / $total"
     }
 
-    fun progressPercent(currentIndex: Int, total: Int): Int {
-        if (total <= 1) return 0
-        val position = currentIndex.coerceIn(0, total - 1)
-        return ((position.toFloat() / (total - 1).toFloat()) * 100f).roundToInt().coerceIn(0, 100)
-    }
+    fun progressPercent(currentIndex: Int, total: Int): Int =
+        (QuietReaderUiPolicy.progressFraction(currentIndex, total) * 100).roundToInt()
 
-    fun progressFraction(currentIndex: Int, total: Int): Float {
-        if (total <= 0) return 0f
-        return (progressPercent(currentIndex, total) / 100f).coerceIn(0f, 1f)
-    }
+    fun progressFraction(currentIndex: Int, total: Int): Float =
+        QuietReaderUiPolicy.progressFraction(currentIndex, total)
 
     fun speedLabel(speed: Float): String = "%.1fx".format(speed)
+
+    /**
+     * The cloud preview feedback panel lives directly under the `Cloud 음성 미리듣기` button, so it is
+     * shown only in the active cloud modes where that button is rendered. In 휴대폰 TTS there is no
+     * cloud preview to report on, so the panel stays hidden.
+     */
+    fun showsCloudPreviewFeedback(mode: PlaybackMode): Boolean = mode != PlaybackMode.ON_DEVICE
 
     fun cloudPreviewFeedback(status: String): CloudPreviewFeedback {
         val inProgress = status == "클라우드 음성 준비 중…"

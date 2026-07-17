@@ -4,8 +4,8 @@
 
 ## 현재 버전
 
-- `versionCode`: 27
-- `versionName`: `0.9.0-service-owned-playback`
+- `versionCode`: 36
+- `versionName`: `0.12.0-byok-setup-wizard`
 - 패키지: `com.codro.listenstudy`
 - 최소 SDK: 26
 - 대상 SDK: 35
@@ -17,6 +17,7 @@
 - 온디바이스 Android TTS 연속 재생
 - 휴대폰 기본 TTS 엔진·음성 설정 사용
 - Google Cloud TTS Standard/WaveNet 시험 기능과 문장별 로컬 캐시
+- BYOK(사용자 키) 단계형 설정 마법사: 전송·비용 고지 확인 후에만 키 저장, 미리듣기, 키/캐시 분리 삭제
 - 문장 하이라이트와 자동 스크롤
 - 재생·일시정지, 이전·다음 문장, 문장 선택 이동
 - 0.5x~3.0x 배속

@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">ListenStudy</string>
+    <string name="library_title">내 서재</string>
+    <string name="library_description">최근 학습한 자료부터 표시됩니다.</string>
+    <string name="import_txt">TXT 가져오기</string>
+    <string name="reader">읽기</string>
+    <string name="library">서재</string>
+    <string name="settings">설정</string>
+    <string name="back">뒤로</string>
+    <string name="play">재생</string>
+    <string name="pause">일시정지</string>
+    <string name="previous">이전</string>
+    <string name="next">다음</string>
+    <string name="voice_picker_title">목소리 선택</string>
+    <string name="phone_tts">휴대폰 TTS</string>
+    <string name="phone_tts_settings">휴대폰 TTS 설정 열기</string>
+    <string name="delete">삭제</string>
+    <string name="cancel">취소</string>
+    <string name="library_empty_title">저장된 학습 자료가 없습니다.</string>
+    <string name="library_empty_description">TXT 가져오기를 눌러 첫 자료를 가져오세요.</string>
+    <string name="library_item_summary">%1$d문장 · 재생 %2$s · %3$d%%</string>
+    <string name="more_actions">더보기</string>
+    <string name="more_actions_for_document">%1$s 더보기</string>
+    <string name="delete_document_title">학습 자료 삭제</string>
+    <string name="delete_document_message">저장된 문장과 이어듣기 위치를 모두 삭제할까요?</string>
+    <string name="playing">재생 중</string>
+    <string name="waiting">대기 중</string>
+    <string name="no_reading_text">읽을 텍스트가 없습니다.</string>
+    <string name="current_sentence">현재 재생 문장</string>
+    <string name="reading_sentence">읽기 문장</string>
+    <string name="progress_unavailable">진행 정보 없음</string>
+    <string name="progress_description">%1$d / %2$d문장 · %3$d%%</string>
+    <string name="play_from_sentence">%1$d번째 문장부터 재생</string>
+    <string name="collapse_controls">추가 컨트롤 닫기</string>
+    <string name="expand_controls">추가 컨트롤 열기</string>
+    <string name="expanded">펼쳐짐</string>
+    <string name="collapsed">접힘</string>
+    <string name="controls">컨트롤</string>
+    <string name="hide_controls">숨기기 ▼</string>
+    <string name="show_controls">열기 ▲</string>
+    <string name="slower">- 속도</string>
+    <string name="faster">+ 속도</string>
+    <string name="voice">목소리</string>
+    <string name="preview">미리듣기</string>
+    <string name="cloud">클라우드</string>
+    <string name="current_engine">현재 엔진: %1$s</string>
+    <string name="current_voice_count">현재 목소리: %1$s · 전체 %2$d개</string>
+    <string name="tts_engine">TTS 엔진</string>
+    <string name="tts_engines_loading">설치된 TTS 엔진 목록을 아직 읽는 중입니다.</string>
+    <string name="no_voices">선택 가능한 목소리가 없습니다. 휴대폰 TTS 음성 데이터를 추가해 주세요.</string>
+    <string name="voice_install_hint">좋은 목소리가 안 보이면 휴대폰에 Google/Samsung 한국어 음성 데이터를 추가해 주세요.</string>
+    <string name="ls_selected">선택됨</string>
+    <string name="ls_not_selected">선택 안 됨</string>
+    <string name="select">선택</string>
+    <string name="select_engine_a11y">%1$s 엔진 선택</string>
+    <string name="select_voice_a11y">%1$s 목소리 선택</string>
+    <string name="default_phone_engine">휴대폰 기본 엔진</string>
+    <string name="offline_available">오프라인 가능</string>
+    <string name="online_required">온라인 필요</string>
+    <string name="recommended">추천</string>
+    <string name="settings_description">음성, Cloud TTS와 캐시를 관리합니다.</string>
+    <string name="playback_and_voice">재생 및 음성</string>
+    <string name="google_cloud_advanced">Google Cloud 고급</string>
+    <string name="cloud_inactive_description">현재는 휴대폰 TTS 모드입니다. Cloud 음성을 선택하려면 먼저 사용할 Cloud 모드로 전환하세요.</string>
+    <string name="cloud_active_description">현재 %1$s 모드에서 사용할 수 있는 Cloud 음성입니다.</string>
+    <string name="switch_to_standard">Google Standard로 전환</string>
+    <string name="switch_to_wavenet">Google WaveNet으로 전환</string>
+    <string name="storage">저장 공간</string>
+    <string name="engine_value">엔진: %1$s</string>
+    <string name="voice_value">목소리: %1$s</string>
+    <string name="phone_settings">휴대폰 설정</string>
+    <string name="voice_preview">목소리 미리듣기</string>
+    <string name="choose_engine_and_voice">모든 엔진 및 목소리 선택</string>
+    <string name="cloud_voice_preview">Cloud 음성 미리듣기</string>
+    <string name="replace_api_key">새 키로 교체</string>
+    <string name="google_cloud_api_key">Google Cloud API 키</string>
+    <string name="delete_key">키 삭제</string>
+    <string name="cache_summary">%1$d개 · %2$s / 최대 128 MB</string>
+    <string name="cache_description">캐시가 있으면 API 키와 네트워크 없이 재생합니다. 오래 사용하지 않은 파일부터 자동 정리됩니다.</string>
+    <string name="clear_cache">캐시 전체 삭제</string>
+    <string name="clear_cache_notice">캐시 삭제는 저장된 Cloud 음성 파일만 지웁니다. API 키는 삭제되지 않습니다.</string>
+    <string name="status_loading">처리 중</string>
+
+    <!-- BYOK Cloud TTS setup wizard -->
+    <string name="cloud_setup_entry_intro">휴대폰 TTS는 API 키 없이 무료로 쓸 수 있어요. 더 자연스러운 Google Cloud 음성이 필요할 때만 아래에서 설정하세요.</string>
+    <string name="cloud_setup_start">설정 시작</string>
+    <string name="cloud_setup_configured_badge">Cloud TTS 설정됨</string>
+    <string name="cloud_setup_configured_hint">API 키가 안전하게 저장되어 있습니다. 키를 교체하거나 삭제할 수 있어요.</string>
+    <string name="cloud_setup_replace">키 교체</string>
+    <string name="cloud_setup_delete_notice">키를 삭제해도 저장된 Cloud 음성 캐시는 지워지지 않습니다. 캐시는 저장 공간에서 따로 삭제하세요.</string>
+    <string name="cloud_setup_step_indicator">단계 %1$d / %2$d</string>
+    <string name="cloud_setup_next">다음</string>
+    <string name="cloud_setup_prev">이전</string>
+    <string name="cloud_setup_close">닫기</string>
+    <string name="cloud_setup_finish">완료</string>
+
+    <string name="cloud_setup_intro_title">Cloud TTS는 선택 기능이에요</string>
+    <string name="cloud_setup_intro_body">휴대폰 TTS는 키가 필요 없고 무료입니다. Cloud TTS는 더 자연스러운 음성을 원하는 분을 위한 선택 기능이며, 본인의 Google Cloud 키가 필요합니다.</string>
+
+    <string name="cloud_setup_notice_title">전송 및 비용 안내</string>
+    <string name="cloud_setup_notice_data_body">Cloud TTS를 사용하면 재생할 문장 텍스트가 Google Cloud로 전송됩니다.</string>
+    <string name="cloud_setup_notice_cost_body">내 Google Cloud 프로젝트에 비용이 발생할 수 있고, 비용·한도 관리는 내 책임입니다. 앱은 금액을 보장하지 않습니다.</string>
+    <string name="cloud_setup_consent_data">문장 텍스트가 Google Cloud로 전송됨을 이해했습니다.</string>
+    <string name="cloud_setup_consent_cost">비용이 발생할 수 있고 비용·한도 관리가 내 책임임을 이해했습니다.</string>
+
+    <string name="cloud_setup_restrictions_title">Google Cloud Console 제한 설정</string>
+    <string name="cloud_setup_restrictions_body">키가 유출돼도 다른 곳에서 쓰지 못하도록 아래 제한을 걸어 주세요.</string>
+    <string name="cloud_setup_restriction_api">API 제한: Cloud Text-to-Speech API</string>
+    <string name="cloud_setup_restriction_app">애플리케이션 제한: Android 앱</string>
+    <string name="cloud_setup_restriction_package">패키지 이름: com.codro.listenstudy</string>
+    <string name="cloud_setup_restriction_sha">Release SHA-1: Google Play Console &gt; 설정 &gt; 앱 무결성 &gt; 앱 서명 키 인증서에서 확인해 Android 앱 제한에 등록하세요.</string>
+
+    <string name="cloud_setup_enter_title">API 키 입력 및 저장</string>
+    <string name="cloud_setup_save">안전하게 저장</string>
+    <string name="cloud_setup_save_hint">키는 APK에 포함되지 않고 Android Keystore로 보호되는 앱 비공개 저장소에만 저장됩니다.</string>
+    <string name="cloud_setup_save_disabled_hint">전송·비용 안내를 모두 확인하고 키를 입력해야 저장할 수 있어요.</string>
+
+    <string name="cloud_setup_result_title">저장 결과 확인 · 미리듣기</string>
+    <string name="cloud_setup_result_pending">저장 요청 결과를 기다리는 중입니다. 아래 상태 메시지를 확인하세요.</string>
+    <string name="cloud_setup_result_success">키가 저장되었습니다. Cloud 음성을 미리들어 정상 동작하는지 확인해 보세요.</string>
+    <string name="cloud_setup_result_failed">이번 저장 요청은 성공하지 못했습니다. 아래 메시지를 확인한 뒤 이전 단계에서 다시 시도해 주세요.</string>
+    <string name="cloud_setup_existing_key_caveat">이전에 저장된 키가 아직 그대로 설정되어 있을 수 있습니다. 키가 설정되어 있다는 표시는 이번 저장 요청이 성공했다는 뜻이 아닙니다.</string>
+    <string name="cloud_setup_service_status">앱 상태 메시지</string>
+    <!-- Recovery action labels come from CloudTtsErrorPolicy so the wording is unit-tested with the
+         classification it belongs to; only this dismissal is presentation-only. -->
+    <string name="cloud_error_dismiss">닫기</string>
+</resources>

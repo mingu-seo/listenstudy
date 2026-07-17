@@ -1,5 +1,7 @@
 package com.codro.listenstudy.data.repository
 
+import com.codro.listenstudy.domain.reader.ReadingProgressPolicy
+
 data class StoredDocument(
     val id: String,
     val title: String,
@@ -40,7 +42,7 @@ object LibraryMapper {
             title = document.title,
             sentenceCount = count,
             lastSentenceIndex = index,
-            progressPercent = if (count <= 1) 0 else (index * 100 / (count - 1)),
+            progressPercent = ReadingProgressPolicy.percent(index, count),
             progressLabel = "위치 $displayedPosition / $count",
             updatedAt = document.updatedAt,
         )
