@@ -7,6 +7,7 @@
     <string name="library">서재</string>
     <string name="settings">설정</string>
     <string name="back">뒤로</string>
+    <string name="first">처음</string>
     <string name="play">재생</string>
     <string name="pause">일시정지</string>
     <string name="previous">이전</string>

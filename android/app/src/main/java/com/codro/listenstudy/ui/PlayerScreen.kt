@@ -267,6 +267,7 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
                 progress = QuietReaderUiPolicy.progressFraction(state.currentIndex, state.sentences.size),
                 expanded = controlsExpanded,
                 onToggleExpanded = { controlsExpanded = !controlsExpanded },
+                onFirst = { viewModel.jumpTo(PlayerUiFormatter.FIRST_SENTENCE_INDEX) },
                 onPrevious = viewModel::previous,
                 onPlayPause = {
                     if (state.status == PlaybackStatus.Playing) viewModel.pause() else viewModel.play()
@@ -571,6 +572,7 @@ private fun BottomPlayerBar(
     progress: Float,
     expanded: Boolean,
     onToggleExpanded: () -> Unit,
+    onFirst: () -> Unit,
     onPrevious: () -> Unit,
     onPlayPause: () -> Unit,
     onNext: () -> Unit,
@@ -627,24 +629,33 @@ private fun BottomPlayerBar(
                 Spacer(modifier = Modifier.height(QuietReaderSpacing.sm))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(QuietReaderSpacing.sm),
+                    horizontalArrangement = Arrangement.spacedBy(QuietReaderSpacing.xs),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    LsOutlinedButton(
-                        text = stringResource(R.string.previous),
-                        onClick = onPrevious,
-                        modifier = Modifier.weight(1f),
-                    )
-                    LsButton(
-                        text = if (status == PlaybackStatus.Playing) stringResource(R.string.pause) else stringResource(R.string.play),
-                        onClick = onPlayPause,
-                        modifier = Modifier.weight(1.2f).sizeIn(minHeight = QuietReaderSizes.PlayButton),
-                    )
-                    LsOutlinedButton(
-                        text = stringResource(R.string.next),
-                        onClick = onNext,
-                        modifier = Modifier.weight(1f),
-                    )
+                    PlayerUiFormatter.primaryPlaybackControls().forEach { control ->
+                        when (control) {
+                            PrimaryPlaybackControl.First -> LsOutlinedButton(
+                                text = stringResource(R.string.first),
+                                onClick = onFirst,
+                                modifier = Modifier.weight(1f),
+                            )
+                            PrimaryPlaybackControl.Previous -> LsOutlinedButton(
+                                text = stringResource(R.string.previous),
+                                onClick = onPrevious,
+                                modifier = Modifier.weight(1f),
+                            )
+                            PrimaryPlaybackControl.PlayPause -> LsButton(
+                                text = if (status == PlaybackStatus.Playing) stringResource(R.string.pause) else stringResource(R.string.play),
+                                onClick = onPlayPause,
+                                modifier = Modifier.weight(1.2f).sizeIn(minHeight = QuietReaderSizes.PlayButton),
+                            )
+                            PrimaryPlaybackControl.Next -> LsOutlinedButton(
+                                text = stringResource(R.string.next),
+                                onClick = onNext,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                    }
                 }
             }
 

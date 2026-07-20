@@ -4,8 +4,8 @@
 
 ## 현재 버전
 
-- `versionCode`: 36
-- `versionName`: `0.12.0-byok-setup-wizard`
+- `versionCode`: 37
+- `versionName`: `0.12.1-first-focus`
 - 패키지: `com.codro.listenstudy`
 - 최소 SDK: 26
 - 대상 SDK: 35

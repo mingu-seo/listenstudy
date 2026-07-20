@@ -15,6 +15,9 @@ data class BottomPlayerControlVisibility(
     val showAdditionalControls: Boolean,
 )
 
+/** The primary playback controls rendered in the reader BottomPlayerBar, in display order. */
+enum class PrimaryPlaybackControl { First, Previous, PlayPause, Next }
+
 data class DocumentTextLayout(
     val sentenceFontSizeSp: Int,
     val sentenceLineHeightSp: Int,
@@ -24,6 +27,17 @@ data class DocumentTextLayout(
 )
 
 object PlayerUiFormatter {
+    /** The sentence focus index the 처음 control jumps to, reusing the ServiceCommand.Jump path. */
+    const val FIRST_SENTENCE_INDEX = 0
+
+    /** Ordered primary controls: 처음 → 이전 → 재생/일시정지 → 다음. */
+    fun primaryPlaybackControls(): List<PrimaryPlaybackControl> = listOf(
+        PrimaryPlaybackControl.First,
+        PrimaryPlaybackControl.Previous,
+        PrimaryPlaybackControl.PlayPause,
+        PrimaryPlaybackControl.Next,
+    )
+
     fun documentTextLayout(): DocumentTextLayout = DocumentTextLayout(
         sentenceFontSizeSp = QuietReaderType.ReaderFontSizeSp,
         sentenceLineHeightSp = QuietReaderType.ReaderLineHeightSp,
