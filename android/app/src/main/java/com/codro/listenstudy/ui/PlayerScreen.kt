@@ -176,6 +176,7 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
             onPreviewVoice = viewModel::previewVoice,
             onOpenTtsSettings = viewModel::openTtsSettings,
             onOpenVoicePicker = { voiceSheetVisible = true },
+            onOpenAbout = { navigation = navigation.navigate(AppNavigationEvent.OpenAbout) },
         )
         if (voiceSheetVisible) {
             VoicePickerSheet(
@@ -195,6 +196,14 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
                 onOpenTtsSettings = viewModel::openTtsSettings,
             )
         }
+        return
+    }
+
+    if (navigation.destination == AppDestination.About) {
+        BackHandler { navigation = navigation.navigate(AppNavigationEvent.Back) }
+        AboutScreen(
+            onBack = { navigation = navigation.navigate(AppNavigationEvent.Back) },
+        )
         return
     }
 
@@ -1024,6 +1033,7 @@ private fun SettingsScreen(
     onPreviewVoice: (String) -> Unit,
     onOpenTtsSettings: () -> Unit,
     onOpenVoicePicker: () -> Unit,
+    onOpenAbout: () -> Unit,
 ) {
     val previewFeedback = PlayerUiFormatter.cloudPreviewFeedback(ttsStatus)
     val loadingStatus = stringResource(R.string.status_loading)
@@ -1143,6 +1153,19 @@ private fun SettingsScreen(
                         Text(stringResource(R.string.cache_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.extendedColors.textSecondary)
                         LsOutlinedButton(stringResource(R.string.clear_cache), onClearCache, Modifier.fillMaxWidth())
                         Text(stringResource(R.string.clear_cache_notice), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.extendedColors.textSecondary)
+                    }
+                }
+            }
+            item {
+                Surface(modifier = Modifier.fillMaxWidth(), shape = QuietReaderShapes.medium, color = MaterialTheme.colorScheme.surface) {
+                    Column(modifier = Modifier.padding(QuietReaderSpacing.lg), verticalArrangement = Arrangement.spacedBy(QuietReaderSpacing.sm)) {
+                        Text(stringResource(R.string.about), fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.about_description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.extendedColors.textSecondary)
+                        LsOutlinedButton(
+                            stringResource(R.string.about_open),
+                            onOpenAbout,
+                            Modifier.fillMaxWidth(),
+                        )
                     }
                 }
             }

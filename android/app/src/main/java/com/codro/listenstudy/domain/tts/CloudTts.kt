@@ -163,7 +163,7 @@ object CloudFailureClassifier {
 class CloudPrefetchPlanner(private val maxAhead: Int = 2) {
     private var context: String? = null
     private var generation = 0L
-    fun plan(sentences: List<String>, current: Int): List<String> = sentences.drop(current + 1).distinct().take(maxAhead.coerceIn(1, 3))
+    fun plan(sentences: List<String>, current: Int): List<String> = sentences.drop(current + 1).distinct().take(maxAhead.coerceIn(1, 2))
     fun contextToken(documentId: String, voiceId: String): Long {
         val next = "$documentId\u0000$voiceId"
         if (next != context) { context = next; generation++ }

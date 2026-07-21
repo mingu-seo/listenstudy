@@ -13,13 +13,14 @@ android {
         applicationId = "com.codro.listenstudy"
         minSdk = 26
         targetSdk = 35
-        versionCode = 37
-        versionName = "0.12.1-first-focus"
+        versionCode = 38
+        versionName = "0.13.0-about-policy"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     packaging {

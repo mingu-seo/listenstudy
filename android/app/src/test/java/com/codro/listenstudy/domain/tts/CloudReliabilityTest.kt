@@ -39,9 +39,9 @@ class CloudReliabilityTest {
         assertEquals(CloudFailureKind.PLAYBACK, CloudFailureClassifier.playback().kind)
     }
 
-    @Test fun `prefetch planner takes at most three next unique sentences and changes generation`() {
-        val planner = CloudPrefetchPlanner(maxAhead = 3)
-        assertEquals(listOf("b", "c", "d"), planner.plan(listOf("a", "b", "b", "c", "d"), 0))
+    @Test fun `prefetch planner takes at most two next unique sentences and changes generation`() {
+        val planner = CloudPrefetchPlanner(maxAhead = 2)
+        assertEquals(listOf("b", "c"), planner.plan(listOf("a", "b", "b", "c", "d"), 0))
         val first = planner.contextToken("doc1", "voice")
         val same = planner.contextToken("doc1", "voice")
         val changed = planner.contextToken("doc2", "voice")

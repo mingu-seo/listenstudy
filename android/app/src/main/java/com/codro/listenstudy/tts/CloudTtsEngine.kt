@@ -272,7 +272,7 @@ class CloudTtsEngine(context: Context) {
         if (apiKey.isBlank() || texts.isEmpty()) return
         val token = prefetchGeneration.invalidateAndGet()
         executor.execute {
-            for (text in texts.distinct().take(3)) {
+            for (text in texts.distinct().take(2)) {
                 runCatching {
                     runBlocking { prefetchGate.audioIfCurrent(token, CloudSynthesisRequest(text, voiceId), apiKey) }
                 }
