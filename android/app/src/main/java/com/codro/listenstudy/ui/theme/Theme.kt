@@ -58,6 +58,31 @@ object QuietReaderPalette {
     val DarkOnErrorContainer = Color(0xFFFFDAD6)
 }
 
+/**
+ * Optional warm sepia palette for Supporters. A light-scheme variant of the Quiet Reader palette:
+ * warm paper tones, same structure, contrast pinned by SupporterSepiaThemeTest (AAA body text,
+ * AA secondary/highlight). Dark mode keeps the standard dark palette.
+ */
+object SupporterSepiaPalette {
+    val Primary = Color(0xFF6D4F23)
+    val OnPrimary = Color.White
+    val PrimaryContainer = Color(0xFFEBDDBE)
+    val OnPrimaryContainer = Color(0xFF3E2E12)
+    val Background = Color(0xFFF3E9D8)
+    val Surface = Color(0xFFFAF3E5)
+    val SurfaceVariant = Color(0xFFEDE0CB)
+    val TextPrimary = Color(0xFF3B2F1E)
+    val TextSecondary = Color(0xFF5F5138)
+    val Outline = Color(0xFF7C6E52)
+    val OutlineSubtle = Color(0xFFDDD0B8)
+    val ReadingCurrent = Color(0xFFE7D3A9)
+    val OnReadingCurrent = Color(0xFF4A3811)
+    val Success = Color(0xFF2F6B4F)
+    val Warning = Color(0xFF7A570B)
+    val Error = Color(0xFFB3261E)
+    val ErrorContainer = Color(0xFFFBEFE9)
+}
+
 object QuietReaderType {
     const val ReaderFontSizeSp = 15
     const val ReaderLineHeightSp = 22
@@ -162,6 +187,23 @@ private val DarkColors = darkColorScheme(
     onErrorContainer = QuietReaderPalette.DarkOnErrorContainer,
 )
 
+private val SepiaColors = lightColorScheme(
+    primary = SupporterSepiaPalette.Primary,
+    onPrimary = SupporterSepiaPalette.OnPrimary,
+    primaryContainer = SupporterSepiaPalette.PrimaryContainer,
+    onPrimaryContainer = SupporterSepiaPalette.OnPrimaryContainer,
+    background = SupporterSepiaPalette.Background,
+    onBackground = SupporterSepiaPalette.TextPrimary,
+    surface = SupporterSepiaPalette.Surface,
+    onSurface = SupporterSepiaPalette.TextPrimary,
+    surfaceVariant = SupporterSepiaPalette.SurfaceVariant,
+    onSurfaceVariant = SupporterSepiaPalette.TextSecondary,
+    outline = SupporterSepiaPalette.Outline,
+    outlineVariant = SupporterSepiaPalette.OutlineSubtle,
+    error = SupporterSepiaPalette.Error,
+    errorContainer = SupporterSepiaPalette.ErrorContainer,
+)
+
 private val ListenStudyTypography = Typography(
     headlineMedium = TextStyle(fontSize = 24.sp, lineHeight = 32.sp, fontWeight = FontWeight.SemiBold),
     headlineSmall = TextStyle(fontSize = 24.sp, lineHeight = 32.sp, fontWeight = FontWeight.SemiBold),
@@ -183,10 +225,14 @@ private val ListenStudyShapes = Shapes(
 @Composable
 fun ListenStudyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    // Supporter-only warm sepia option. Callers pass SupporterEntitlementStore.isSepiaThemeActive()
+    // so the theme is applied only while the selection is backed by the entitlement. It varies the
+    // light scheme; dark mode keeps the standard dark palette for night readability.
+    sepiaTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val extended = if (darkTheme) {
-        ExtendedColors(
+    val extended = when {
+        darkTheme -> ExtendedColors(
             textPrimary = QuietReaderPalette.DarkTextPrimary,
             textSecondary = QuietReaderPalette.DarkTextSecondary,
             outlineSubtle = QuietReaderPalette.DarkOutlineSubtle,
@@ -195,8 +241,16 @@ fun ListenStudyTheme(
             success = QuietReaderPalette.DarkSuccess,
             warning = QuietReaderPalette.DarkWarning,
         )
-    } else {
-        ExtendedColors(
+        sepiaTheme -> ExtendedColors(
+            textPrimary = SupporterSepiaPalette.TextPrimary,
+            textSecondary = SupporterSepiaPalette.TextSecondary,
+            outlineSubtle = SupporterSepiaPalette.OutlineSubtle,
+            readingCurrent = SupporterSepiaPalette.ReadingCurrent,
+            onReadingCurrent = SupporterSepiaPalette.OnReadingCurrent,
+            success = SupporterSepiaPalette.Success,
+            warning = SupporterSepiaPalette.Warning,
+        )
+        else -> ExtendedColors(
             textPrimary = QuietReaderPalette.LightTextPrimary,
             textSecondary = QuietReaderPalette.LightTextSecondary,
             outlineSubtle = QuietReaderPalette.LightOutlineSubtle,
@@ -208,7 +262,11 @@ fun ListenStudyTheme(
     }
     androidx.compose.runtime.CompositionLocalProvider(LocalExtendedColors provides extended) {
         MaterialTheme(
-            colorScheme = if (darkTheme) DarkColors else LightColors,
+            colorScheme = when {
+                darkTheme -> DarkColors
+                sepiaTheme -> SepiaColors
+                else -> LightColors
+            },
             typography = ListenStudyTypography,
             shapes = ListenStudyShapes,
             content = content,

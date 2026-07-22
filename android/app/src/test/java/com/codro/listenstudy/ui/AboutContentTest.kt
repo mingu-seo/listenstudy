@@ -80,8 +80,8 @@ class AboutContentTest {
 
     @Test
     fun `the full in-app privacy notice covers every documented topic`() {
-        // With the public codro.it pages unpublished, the About screen must itself carry the full,
-        // current privacy notice. These sections must mirror privacy-policy-ko.md, including the
+        // The About screen carries the key content of the current privacy notice. These sections
+        // must stay aligned with privacy-policy-ko.md in substance, including the
         // policy status / effective-date metadata, the on-device offline/network distinction, the
         // Google Cloud transfer-plus-prefetch topic, and the children-privacy clause.
         assertEquals(
@@ -104,10 +104,9 @@ class AboutContentTest {
 
     @Test
     fun `the in-app privacy notice models policy status effective date and children`() {
-        // The public codro.it page is unpublished, so the in-app notice IS the current authoritative
-        // policy. Two topics the docs carry were previously unmodeled in-app: the applicable-status /
-        // effective-date metadata (2026-07-21) and the children-privacy clause. Both must exist as
-        // their own sections so the About screen mirrors privacy-policy-ko.md exactly.
+        // Two topics the docs carry were previously unmodeled in-app: the applicable-status /
+        // effective-date metadata and the children-privacy clause. Both must exist as
+        // their own sections so the About screen stays aligned with privacy-policy-ko.md.
         assertTrue(
             "policy status / effective-date section must be present",
             AboutContent.privacySections.contains(PrivacySection.PolicyStatusAndEffectiveDate),
@@ -143,6 +142,20 @@ class AboutContentTest {
     }
 
     @Test
+    fun `privacy sections order billing before retention as in the published markdown`() {
+        // privacy-policy-ko.md numbers Billing as §7 and Retention/Deletion as §8. The in-app
+        // notice must render in the same order so the two texts stay aligned section by section.
+        val billing = AboutContent.privacySections.indexOf(PrivacySection.Billing)
+        val retention = AboutContent.privacySections.indexOf(PrivacySection.RetentionDeletion)
+        assertTrue("Billing section must exist", billing >= 0)
+        assertTrue("Retention section must exist", retention >= 0)
+        assertTrue(
+            "Billing (§7) must precede Retention (§8) to match privacy-policy-ko.md",
+            billing < retention,
+        )
+    }
+
+    @Test
     fun `the in-app notice is presented as the current authoritative policy not a packaged external doc`() {
         // Blocker: the pending note previously implied an external document was bundled in the APK.
         // The in-app sections carry the current revision while the published URLs remain available.
@@ -160,10 +173,31 @@ class AboutContentTest {
 
         assertTrue("at least four notices", AboutContent.openSourceNotices.size >= 4)
         AboutContent.openSourceNotices.forEach { notice ->
+            // Licenses differ per dependency (e.g. Play Billing is not Apache 2.0), so each entry
+            // must carry its own license name instead of a blanket claim.
             assertTrue("license set for ${notice.name}", notice.license.isNotBlank())
-            assertEquals("Apache License 2.0", notice.license)
             assertTrue("url is https for ${notice.name}", notice.url.startsWith("https://"))
         }
+    }
+
+    @Test
+    fun `google play billing library is disclosed with its own non-apache license`() {
+        // Task 7 adds com.android.billingclient:billing as a direct dependency; the component
+        // notice list must include it. It ships under the Android SDK license, not Apache 2.0, so
+        // the old "everything is Apache 2.0" claim would be false the moment it is listed.
+        val billing = AboutContent.openSourceNotices.firstOrNull {
+            it.name.contains("Billing", ignoreCase = true)
+        }
+        assertTrue("Google Play Billing Library notice must exist", billing != null)
+        assertTrue(
+            "Billing license must be the Android SDK license, not Apache",
+            billing!!.license.contains("Android Software Development Kit"),
+        )
+        assertFalse("Billing must not be claimed as Apache", billing.license.contains("Apache"))
+        assertTrue(
+            "Billing notice must point at the official page",
+            billing.url.startsWith("https://developer.android.com/"),
+        )
     }
 
     @Test

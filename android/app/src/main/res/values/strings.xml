@@ -126,6 +126,31 @@
          classification it belongs to; only this dismissal is presentation-only. -->
     <string name="cloud_error_dismiss">닫기</string>
 
+    <!-- Supporter one-time purchase (Settings). Price/title always come from Play, never hard-coded. -->
+    <string name="supporter_title">개발자 응원하기</string>
+    <string name="supporter_description">소리노트의 모든 핵심 기능은 무료입니다. 원하시는 분만 일회성 후원으로 개발을 응원할 수 있어요.</string>
+    <string name="supporter_free_notice">후원 여부와 관계없이 읽기, 휴대폰 TTS, BYOK Cloud TTS 등 모든 기능을 계속 사용할 수 있습니다.</string>
+    <string name="supporter_product_line">%1$s · %2$s</string>
+    <string name="supporter_purchase">후원하기</string>
+    <string name="supporter_restore">구매 복원</string>
+    <string name="supporter_retry">다시 시도</string>
+    <string name="supporter_loading">Google Play에서 후원 상품 정보를 불러오는 중입니다.</string>
+    <string name="supporter_unavailable">이 기기에서는 Google Play 결제를 사용할 수 없습니다. 앱의 모든 기능은 계속 무료로 사용할 수 있어요.</string>
+    <string name="supporter_pending">결제가 완료되길 기다리는 중입니다. 결제가 확정되면 자동으로 반영됩니다.</string>
+    <string name="supporter_purchased_badge">후원해 주셔서 감사합니다 💛</string>
+    <string name="supporter_purchased_body">보내주신 응원은 소리노트를 계속 다듬는 데 큰 힘이 됩니다.</string>
+    <string name="supporter_theme_title">세피아 테마 (후원자 전용)</string>
+    <string name="supporter_theme_body">따뜻한 세피아 색상의 읽기 화면입니다. 라이트 모드에서 적용되며 언제든 끌 수 있어요.</string>
+    <string name="supporter_error_network">네트워크 연결을 확인한 뒤 다시 시도해 주세요.</string>
+    <string name="supporter_error_item_unavailable">지금은 후원 상품을 불러올 수 없습니다. 나중에 다시 확인해 주세요.</string>
+    <string name="supporter_error_billing_unavailable">Google Play 결제를 사용할 수 없는 상태입니다.</string>
+    <string name="supporter_error_unknown">일시적인 오류가 발생했습니다. 나중에 다시 시도해 주세요.</string>
+    <string name="supporter_msg_thanks">후원이 완료되었습니다. 진심으로 감사합니다!</string>
+    <string name="supporter_msg_cancelled">결제를 취소했습니다. 언제든 다시 응원할 수 있어요.</string>
+    <string name="supporter_msg_restored">이전 후원 내역을 복원했습니다. 감사합니다!</string>
+    <string name="supporter_msg_nothing_to_restore">복원할 후원 내역이 없습니다.</string>
+    <string name="supporter_msg_dismiss">확인</string>
+
     <!-- About / app info screen -->
     <string name="about">앱 정보</string>
     <string name="about_open">앱 정보 열기</string>
@@ -160,17 +185,19 @@
     <string name="about_disclosure_no_ads_body">이번 버전에는 광고 SDK와 사용자 행동 분석 SDK가 포함되어 있지 않습니다.</string>
 
     <string name="about_privacy_title">개인정보처리방침</string>
-    <string name="about_privacy_body">개인정보 수집·이용·보관·삭제 방침 전문을 아래에 그대로 싣습니다.</string>
+    <string name="about_privacy_body">현재 적용되는 개인정보 수집·이용·보관·삭제 방침의 핵심 안내를 아래에 싣습니다.</string>
     <string name="about_terms_title">이용안내 · 약관</string>
-    <string name="about_terms_body">앱의 이용 목적, 사용자 콘텐츠 권리와 책임, Cloud TTS 비용, 무보증 및 종료 안내 전문을 아래에 그대로 싣습니다.</string>
+    <string name="about_terms_body">앱의 이용 목적, 사용자 콘텐츠 권리와 책임, Cloud TTS 비용, 무보증 및 종료에 관한 현재 적용 약관의 핵심 안내를 아래에 싣습니다.</string>
     <string name="about_policy_url_label">공개 페이지 주소: %1$s</string>
     <string name="about_open_privacy_policy">개인정보처리방침 웹에서 열기</string>
     <string name="about_open_terms">이용약관 웹에서 열기</string>
 
-    <!-- Full in-app privacy notice (mirrors docs/05_policy/privacy-policy-ko.md). -->
-    <string name="about_privacy_full_title">개인정보처리방침 전문</string>
+    <!-- In-app privacy notice: the key content of the current policy, restructured into sections.
+         The published page (docs/05_policy/privacy-policy-ko.md) carries the full document; the two
+         must stay aligned in numbering and substance, not verbatim-identical. -->
+    <string name="about_privacy_full_title">개인정보처리방침 상세 안내</string>
     <string name="about_privacy_s_status_title">적용 상태 · 시행일</string>
-    <string name="about_privacy_s_status_body">이 화면에 실린 개인정보처리방침은 2026-07-21(KST)부터 시행되는 현재 적용 방침 전문입니다. codro.it 공개 페이지도 운영 중이며 위 버튼으로 열 수 있습니다. 앱 내 전문은 현재 앱 동작을 반영한 최신 안내입니다.</string>
+    <string name="about_privacy_s_status_body">이 화면은 2026-07-22(KST)부터 시행되는 현재 적용 개인정보처리방침의 핵심 내용을 항목별로 안내하며, 현재 앱 동작을 반영합니다. 전체 문서는 codro.it 공개 페이지에서 확인할 수 있고 위 버튼으로 열 수 있습니다.</string>
     <string name="about_privacy_s_operator_title">1. 운영 주체 · 문의</string>
     <string name="about_privacy_s_operator_body">앱 이름: 소리노트(SoriNote) · 개발자/브랜드: Codro · Android 패키지: com.codro.listenstudy · 문의: codro.ceo@gmail.com. 본 방침은 현재 배포 버전의 실제 동작을 기준으로 합니다.</string>
     <string name="about_privacy_s_no_account_title">2. 계정·백엔드·광고·분석 없음</string>
@@ -183,19 +210,21 @@
     <string name="about_privacy_s_phone_tts_body">오프라인(온디바이스) 휴대폰 TTS 음성은 문장 텍스트를 기기 안에서만 처리합니다. 다만 네트워크가 필요한 시스템·제3자 TTS 음성을 선택하면, 해당 문장 텍스트가 그 TTS 제공자에게 전송될 수 있으며 그 처리는 제공자 자체 정책을 따릅니다. 이 전송은 Codro를 경유하지 않습니다.</string>
     <string name="about_privacy_s_cloud_title">6. Google Cloud TTS 전송·선합성·제3자 약관</string>
     <string name="about_privacy_s_cloud_body">사용자가 Google Cloud TTS(Standard/WaveNet)를 선택해 재생하거나 미리들을 때에 한해, 재생 대상 문장 텍스트가 사용자의 API 키로 Google Cloud Text-to-Speech API에 직접 전송됩니다. 이 전송은 앱과 Google 간에 직접 이루어지며 Codro 서버를 경유하지 않고, 그 처리는 사용자 본인의 Google Cloud 계정과 Google의 약관·정책을 따릅니다. 또한 재생 직전에 다음에 나올 서로 다른 문장을 최대 2개까지 미리 합성(선합성)하므로, 실제로 소리가 나기 전에 해당 문장이 전송될 수 있습니다.</string>
-    <string name="about_privacy_s_retention_title">7. 보관 기간·삭제</string>
+    <string name="about_privacy_s_billing_title">7. 결제 — 일회성 후원(Supporter)</string>
+    <string name="about_privacy_s_billing_body">소리노트에는 Google Play 인앱 결제 기반의 일회성 후원(Supporter) 상품이 있습니다. 후원은 전적으로 선택 사항이며, 무료 핵심 기능과 BYOK Cloud TTS 기능은 결제 여부와 무관하게 제공됩니다. 결제·주문·지불 수단 정보의 처리는 Google Play가 담당하며 Google의 약관·개인정보 정책을 따릅니다. 카드번호 등 지불 정보는 앱이 수집·저장하지 않습니다. Codro(앱)는 후원 혜택 제공에 필요한 구매 확인 정보(상품 소유 여부·주문 상태)만 Google Play로부터 전달받고, 기기에는 후원 여부와 테마 선택이라는 최소한의 상태만 저장합니다. 구매 토큰·주문번호·계정 식별자는 저장하거나 로그로 남기지 않습니다. 환불·결제 취소는 Google Play 정책·절차를 따르며, 환불 시 후원 상태는 Google Play 조회 결과에 따라 해제됩니다.</string>
+    <string name="about_privacy_s_retention_title">8. 보관 기간과 삭제</string>
     <string name="about_privacy_s_retention_body">기기 내부 데이터는 앱에서 문서를 삭제하거나, 캐시·키를 삭제하거나, 앱 데이터를 지우거나, 앱을 제거하면 삭제됩니다. Codro는 서버에 사용자 데이터를 보관하지 않으므로 별도의 서버 측 보관·삭제 절차가 없습니다.</string>
-    <string name="about_privacy_s_billing_title">8. 결제(현재 없음)</string>
-    <string name="about_privacy_s_billing_body">현재 배포 버전에는 인앱 결제 기능이 구현되어 있지 않습니다. 향후 일회성 후원(Supporter) 상품이 추가될 경우 시행 전에 본 방침을 갱신하며, 결제 처리는 Google Play가 담당합니다.</string>
     <string name="about_privacy_s_children_title">9. 아동의 개인정보</string>
     <string name="about_privacy_s_children_body">소리노트는 아동을 주요 대상으로 하지 않으며, 아동으로부터 개인정보를 수집하지 않습니다.</string>
     <string name="about_privacy_s_contact_title">10. 문의·변경 고지</string>
     <string name="about_privacy_s_contact_body">문의: codro.ceo@gmail.com. 데이터 처리 방식이 달라지면 변경 사항을 반영해 본 방침을 갱신하고 시행일을 명시합니다.</string>
 
-    <!-- Full in-app terms of use (mirrors docs/05_policy/terms-of-use-ko.md). -->
-    <string name="about_terms_full_title">이용약관 전문</string>
+    <!-- In-app terms of use: the key content of the current terms, restructured into sections.
+         The published page (docs/05_policy/terms-of-use-ko.md) carries the full document; the two
+         must stay aligned in numbering and substance, not verbatim-identical. -->
+    <string name="about_terms_full_title">이용약관 상세 안내</string>
     <string name="about_terms_s_status_title">적용 상태 · 시행일 · 운영 주체</string>
-    <string name="about_terms_s_status_body">이 화면에 실린 이용약관은 2026-07-21(KST)부터 시행되는 현재 적용 약관 전문입니다. 앱 이름은 소리노트(SoriNote), 개발자/브랜드는 Codro, Android 패키지는 com.codro.listenstudy이며 문의 이메일은 codro.ceo@gmail.com입니다. codro.it 공개 페이지도 운영 중이며 위 버튼으로 열 수 있습니다.</string>
+    <string name="about_terms_s_status_body">이 화면은 2026-07-22(KST)부터 시행되는 현재 적용 이용약관의 핵심 내용을 항목별로 안내합니다. 앱 이름은 소리노트(SoriNote), 개발자/브랜드는 Codro, Android 패키지는 com.codro.listenstudy이며 문의 이메일은 codro.ceo@gmail.com입니다. 전체 문서는 codro.it 공개 페이지에서 확인할 수 있고 위 버튼으로 열 수 있습니다.</string>
     <string name="about_terms_s_purpose_title">1. 서비스 소개·이용 목적</string>
     <string name="about_terms_s_purpose_body">소리노트는 TXT 문서를 문장 단위로 나누어 음성으로 들려주는 학습·읽기 보조 Android 앱입니다. 이동 중이거나 화면을 보기 어려운 상황에서 본인이 보유한 텍스트 자료를 듣는 용도로 제공됩니다.</string>
     <string name="about_terms_s_user_content_title">2. 사용자 콘텐츠 권리·책임</string>
@@ -206,17 +235,17 @@
     <string name="about_terms_s_as_is_body">소리노트는 "있는 그대로" 제공됩니다. Codro는 앱이 오류 없이 동작하거나 특정 목적에 적합함을 보증하지 않으며, TTS 음질·정확도나 외부 서비스(Google Cloud 등)의 가용성을 보장하지 않습니다. 관련 법령이 허용하는 범위에서 앱 사용으로 발생한 손해에 대한 Codro의 책임은 제한됩니다.</string>
     <string name="about_terms_s_termination_title">5. 이용 종료·로컬 데이터 삭제</string>
     <string name="about_terms_s_termination_body">사용자는 언제든지 앱을 삭제하여 이용을 종료할 수 있습니다. 앱을 제거하거나 앱 데이터를 지우면 기기에 저장된 문서·진도·설정·캐시·API 키가 삭제될 수 있습니다. Codro는 서버에 사용자 데이터를 보관하지 않으므로 별도의 계정 해지 절차가 없습니다.</string>
-    <string name="about_terms_s_billing_title">6. 결제(예정)</string>
-    <string name="about_terms_s_billing_body">현재 배포 버전에는 결제 기능이 없습니다. 향후 일회성 후원(Supporter) 상품이 추가될 경우, 무료 핵심 기능과 BYOK Cloud TTS 기능은 결제 여부와 무관하게 제공되며, 결제 처리는 Google Play가 담당합니다.</string>
-    <string name="about_terms_s_open_source_title">7. 오픈소스 고지</string>
-    <string name="about_terms_s_open_source_body">소리노트는 오픈소스 구성요소를 사용하며 모두 Apache License 2.0으로 배포됩니다. 구성요소 목록은 아래 "오픈소스 라이선스" 항목에서 확인할 수 있으며, 버전 정보는 저장소의 Gradle 빌드 파일을 기준으로 하고 임의로 표기하지 않습니다.</string>
+    <string name="about_terms_s_billing_title">6. 결제 — 일회성 후원(Supporter)</string>
+    <string name="about_terms_s_billing_body">소리노트는 일회성 후원(Supporter) 상품을 Google Play 인앱 결제로 제공합니다. 후원은 전적으로 선택 사항입니다. 무료 핵심 기능과 BYOK Cloud TTS 기능은 결제 여부와 무관하게 제공되며, 후원자에게는 세피아 테마 같은 감사 표시 외에 어떤 기능 제한·광고 제거 같은 차등도 두지 않습니다. 결제 처리와 환불은 Google Play가 담당하며 Google Play 정책을 따릅니다. Codro는 후원 혜택 제공에 필요한 구매 확인 정보(소유 여부·주문 상태)만 Google Play로부터 전달받습니다(자세한 내용은 개인정보처리방침 7항 참고).</string>
+    <string name="about_terms_s_open_source_title">7. 오픈소스·구성요소 고지</string>
+    <string name="about_terms_s_open_source_body">소리노트는 오픈소스 및 SDK 구성요소를 사용하며, 각 구성요소는 아래 목록에 표기된 자체 라이선스를 따릅니다. Jetpack Compose·AndroidX·Kotlin·Kotlin Coroutines는 Apache License 2.0으로, Google Play Billing Library는 Android Software Development Kit License로 배포됩니다. 구성요소 목록은 아래 "오픈소스·구성요소 고지" 항목에서 확인할 수 있으며, 버전 정보는 저장소의 Gradle 빌드 파일을 기준으로 하고 임의로 표기하지 않습니다.</string>
     <string name="about_terms_s_contact_title">8. 문의·약관 변경</string>
     <string name="about_terms_s_contact_body">문의: codro.ceo@gmail.com. 기능 추가·변경 시 본 약관을 갱신하고 시행일을 명시합니다.</string>
 
     <string name="about_contact_title">지원 · 개인정보 문의</string>
     <string name="about_contact_email">이메일: %1$s</string>
 
-    <string name="about_open_source_title">오픈소스 라이선스</string>
-    <string name="about_open_source_body">이 앱은 다음 오픈소스 구성요소를 사용합니다.</string>
+    <string name="about_open_source_title">오픈소스·구성요소 고지</string>
+    <string name="about_open_source_body">이 앱은 다음 오픈소스 및 SDK 구성요소를 사용하며, 각 항목에 표기된 라이선스를 따릅니다.</string>
     <string name="about_open_source_entry">%1$s · %2$s</string>
 </resources>

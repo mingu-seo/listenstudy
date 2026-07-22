@@ -1,6 +1,7 @@
 package com.codro.listenstudy.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
@@ -42,6 +43,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.text.input.KeyboardType
@@ -81,6 +83,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.codro.listenstudy.R
+import com.codro.listenstudy.billing.SupporterErrorKind
+import com.codro.listenstudy.billing.SupporterMessage
+import com.codro.listenstudy.billing.SupporterState
+import com.codro.listenstudy.billing.SupporterUiState
 import com.codro.listenstudy.data.repository.LibraryItem
 import com.codro.listenstudy.domain.player.PlaybackStatus
 import com.codro.listenstudy.domain.reader.FlowingReaderTextPolicy
@@ -150,6 +156,11 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
 
     if (navigation.destination == AppDestination.Settings) {
         BackHandler { navigation = navigation.navigate(AppNavigationEvent.Back) }
+        val supporter by viewModel.supporterUiState.collectAsState()
+        val sepiaThemeActive by viewModel.sepiaThemeActive.collectAsState()
+        // The purchase flow needs the *current* foreground Activity; it is read here per
+        // composition and only ever passed as a call argument, never stored.
+        val activity = LocalActivity.current
         SettingsScreen(
             mode = playbackMode,
             selectedCloudVoiceId = cloudVoice.id,
@@ -177,6 +188,13 @@ fun PlayerScreen(viewModel: PlayerViewModel) {
             onOpenTtsSettings = viewModel::openTtsSettings,
             onOpenVoicePicker = { voiceSheetVisible = true },
             onOpenAbout = { navigation = navigation.navigate(AppNavigationEvent.OpenAbout) },
+            supporter = supporter,
+            sepiaThemeActive = sepiaThemeActive,
+            onSupporterPurchase = { activity?.let(viewModel::purchaseSupporter) },
+            onSupporterRestore = viewModel::restoreSupporter,
+            onSupporterRetry = viewModel::refreshSupporter,
+            onSepiaTheme = viewModel::setSepiaTheme,
+            onDismissSupporterMessage = viewModel::dismissSupporterMessage,
         )
         if (voiceSheetVisible) {
             VoicePickerSheet(
@@ -1034,6 +1052,13 @@ private fun SettingsScreen(
     onOpenTtsSettings: () -> Unit,
     onOpenVoicePicker: () -> Unit,
     onOpenAbout: () -> Unit,
+    supporter: SupporterUiState,
+    sepiaThemeActive: Boolean,
+    onSupporterPurchase: () -> Unit,
+    onSupporterRestore: () -> Unit,
+    onSupporterRetry: () -> Unit,
+    onSepiaTheme: (Boolean) -> Unit,
+    onDismissSupporterMessage: () -> Unit,
 ) {
     val previewFeedback = PlayerUiFormatter.cloudPreviewFeedback(ttsStatus)
     val loadingStatus = stringResource(R.string.status_loading)
@@ -1157,6 +1182,17 @@ private fun SettingsScreen(
                 }
             }
             item {
+                SupporterCard(
+                    supporter = supporter,
+                    sepiaThemeActive = sepiaThemeActive,
+                    onPurchase = onSupporterPurchase,
+                    onRestore = onSupporterRestore,
+                    onRetry = onSupporterRetry,
+                    onSepiaTheme = onSepiaTheme,
+                    onDismissMessage = onDismissSupporterMessage,
+                )
+            }
+            item {
                 Surface(modifier = Modifier.fillMaxWidth(), shape = QuietReaderShapes.medium, color = MaterialTheme.colorScheme.surface) {
                     Column(modifier = Modifier.padding(QuietReaderSpacing.lg), verticalArrangement = Arrangement.spacedBy(QuietReaderSpacing.sm)) {
                         Text(stringResource(R.string.about), fontWeight = FontWeight.Bold)
@@ -1171,6 +1207,116 @@ private fun SettingsScreen(
             }
         }
     }
+}
+
+/**
+ * Respectful one-time Supporter section for Settings. Core rules, enforced by the billing layer's
+ * unit tests: nothing here ever gates a core/BYOK feature, the price and title always come from
+ * Play (never hard-coded), user cancellation is informational, and the only supporter-gated
+ * capability is the optional sepia theme. Rendered once inside Settings — no popups or nags.
+ */
+@Composable
+private fun SupporterCard(
+    supporter: SupporterUiState,
+    sepiaThemeActive: Boolean,
+    onPurchase: () -> Unit,
+    onRestore: () -> Unit,
+    onRetry: () -> Unit,
+    onSepiaTheme: (Boolean) -> Unit,
+    onDismissMessage: () -> Unit,
+) {
+    Surface(modifier = Modifier.fillMaxWidth(), shape = QuietReaderShapes.medium, color = MaterialTheme.colorScheme.surface) {
+        Column(modifier = Modifier.padding(QuietReaderSpacing.lg), verticalArrangement = Arrangement.spacedBy(QuietReaderSpacing.sm)) {
+            Text(stringResource(R.string.supporter_title), fontWeight = FontWeight.Bold)
+            Text(
+                stringResource(R.string.supporter_description),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.extendedColors.textSecondary,
+            )
+            when (val state = supporter.state) {
+                SupporterState.Loading -> SupporterSecondary(stringResource(R.string.supporter_loading))
+                SupporterState.Unavailable -> SupporterSecondary(stringResource(R.string.supporter_unavailable))
+                is SupporterState.ReadyNotPurchased -> {
+                    state.product?.let { product ->
+                        Text(
+                            stringResource(R.string.supporter_product_line, product.title, product.formattedPrice),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
+                    LsButton(stringResource(R.string.supporter_purchase), onPurchase, Modifier.fillMaxWidth())
+                    LsOutlinedButton(stringResource(R.string.supporter_restore), onRestore, Modifier.fillMaxWidth())
+                }
+                SupporterState.Pending -> SupporterSecondary(stringResource(R.string.supporter_pending))
+                SupporterState.Purchased -> {
+                    Text(
+                        stringResource(R.string.supporter_purchased_badge),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.extendedColors.success,
+                    )
+                    SupporterSecondary(stringResource(R.string.supporter_purchased_body))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(QuietReaderSpacing.sm),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .toggleable(
+                                value = sepiaThemeActive,
+                                role = Role.Switch,
+                                onValueChange = onSepiaTheme,
+                            ),
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(stringResource(R.string.supporter_theme_title), style = MaterialTheme.typography.bodyMedium)
+                            SupporterSecondary(stringResource(R.string.supporter_theme_body))
+                        }
+                        Switch(checked = sepiaThemeActive, onCheckedChange = null)
+                    }
+                }
+                is SupporterState.Error -> {
+                    SupporterSecondary(
+                        stringResource(
+                            when (state.kind) {
+                                SupporterErrorKind.BillingUnavailable -> R.string.supporter_error_billing_unavailable
+                                SupporterErrorKind.ItemUnavailable -> R.string.supporter_error_item_unavailable
+                                SupporterErrorKind.Network -> R.string.supporter_error_network
+                                SupporterErrorKind.Unknown -> R.string.supporter_error_unknown
+                            },
+                        ),
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(QuietReaderSpacing.sm)) {
+                        LsOutlinedButton(stringResource(R.string.supporter_retry), onRetry, Modifier.weight(1f))
+                        LsOutlinedButton(stringResource(R.string.supporter_restore), onRestore, Modifier.weight(1f))
+                    }
+                }
+            }
+            supporter.message?.let { message ->
+                Text(
+                    stringResource(
+                        when (message) {
+                            SupporterMessage.PurchaseThanks -> R.string.supporter_msg_thanks
+                            SupporterMessage.PurchaseCancelled -> R.string.supporter_msg_cancelled
+                            SupporterMessage.RestoredExisting -> R.string.supporter_msg_restored
+                            SupporterMessage.NoPurchaseToRestore -> R.string.supporter_msg_nothing_to_restore
+                        },
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                TextButton(onClick = onDismissMessage) { Text(stringResource(R.string.supporter_msg_dismiss)) }
+            }
+            SupporterSecondary(stringResource(R.string.supporter_free_notice))
+        }
+    }
+}
+
+@Composable
+private fun SupporterSecondary(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.extendedColors.textSecondary,
+    )
 }
 
 /**

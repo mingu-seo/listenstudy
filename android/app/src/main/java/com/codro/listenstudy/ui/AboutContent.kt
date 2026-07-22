@@ -51,15 +51,15 @@ enum class AboutDisclosure {
 }
 
 /**
- * Sections of the full, in-app privacy notice. Because the public codro.it page is unpublished, the
- * About screen must itself carry the complete current notice; each section renders localized title +
- * body from `strings.xml` and must mirror `privacy-policy-ko.md`.
+ * Sections of the in-app privacy notice. The About screen carries the key content of the current
+ * policy restructured into sections; each section renders localized title + body from `strings.xml`
+ * and must stay aligned with `privacy-policy-ko.md` in numbering and substance (not verbatim). The
+ * published codro.it pages carry the full documents and are offered as external links.
  */
 enum class PrivacySection {
     /**
-     * Policy status and effective date: because the public codro.it page is unpublished, the in-app
-     * notice is itself the current, applicable privacy policy as of its effective date (2026-07-21),
-     * with public web publication still pending. Mirrors the status/effective-date block of
+     * Policy status and effective date: the in-app notice covers the current, applicable privacy
+     * policy as of its effective date (2026-07-22), matching the status/effective-date block of
      * `privacy-policy-ko.md`.
      */
     PolicyStatusAndEffectiveDate,
@@ -82,11 +82,16 @@ enum class PrivacySection {
     /** Cloud TTS sends the sentence text to Google under the user's key, and prefetches upcoming sentences. */
     CloudTransferAndPrefetch,
 
-    /** Local-only retention; data is removed on delete / clear-data / uninstall. */
-    RetentionDeletion,
-
-    /** The current release has no in-app billing. */
+    /**
+     * One-time Supporter purchase: Google Play processes purchase/order/payment data; Codro only
+     * receives the entitlement/order status needed to provide Supporter benefits and never stores
+     * or logs purchase tokens/order ids. Refunds clear the status per the Play ownership query.
+     * Core and BYOK features stay free regardless. §7 in `privacy-policy-ko.md`.
+     */
     Billing,
+
+    /** Local-only retention; data is removed on delete / clear-data / uninstall. §8. */
+    RetentionDeletion,
 
     /** Children's privacy: the app is not aimed at children and collects no data from them. */
     Children,
@@ -96,8 +101,9 @@ enum class PrivacySection {
 }
 
 /**
- * Sections of the full, in-app terms of use, mirroring `terms-of-use-ko.md`. Rendered the same way as
- * [PrivacySection] so the whole terms are readable in the About screen while the public page is down.
+ * Sections of the in-app terms of use, aligned with `terms-of-use-ko.md` in numbering and
+ * substance (not verbatim). Rendered the same way as [PrivacySection] so the terms' key content is
+ * readable inside the About screen; the published page carries the full document.
  */
 enum class TermsSection {
     /** Current applicability, effective date, operator, package, contact, and web-publication status. */
@@ -118,7 +124,10 @@ enum class TermsSection {
     /** Termination by uninstalling; no account to close. */
     Termination,
 
-    /** No billing in the current release. */
+    /**
+     * One-time Supporter purchase processed by Google Play; optional, with core/BYOK features free
+     * regardless of purchase state.
+     */
     Billing,
 
     /** Open-source notice pointer. */
@@ -128,7 +137,11 @@ enum class TermsSection {
     ContactAndChanges,
 }
 
-/** A single open-source dependency notice. Versions live in the build files, never here. */
+/**
+ * A single third-party component notice (open-source or SDK). Each entry carries its own license —
+ * they are not all Apache 2.0 (Play Billing ships under the Android SDK license). Versions live in
+ * the build files, never here.
+ */
 data class OpenSourceNotice(
     val name: String,
     val license: String,
@@ -179,8 +192,8 @@ object AboutContent {
     )
 
     /**
-     * Ordered sections of the full in-app privacy notice. Stable order, no duplicates; each maps to a
-     * localized title/body in `strings.xml` and mirrors `privacy-policy-ko.md`.
+     * Ordered sections of the in-app privacy notice. Stable order, no duplicates; each maps to a
+     * localized title/body in `strings.xml` and stays aligned with `privacy-policy-ko.md`.
      */
     val privacySections: List<PrivacySection> = listOf(
         PrivacySection.PolicyStatusAndEffectiveDate,
@@ -190,15 +203,15 @@ object AboutContent {
         PrivacySection.ApiKeyStorageAndDeletion,
         PrivacySection.PhoneTtsNetwork,
         PrivacySection.CloudTransferAndPrefetch,
-        PrivacySection.RetentionDeletion,
         PrivacySection.Billing,
+        PrivacySection.RetentionDeletion,
         PrivacySection.Children,
         PrivacySection.Contact,
     )
 
     /**
-     * Ordered sections of the full in-app terms of use. Stable order, no duplicates; each maps to a
-     * localized title/body in `strings.xml` and mirrors `terms-of-use-ko.md`.
+     * Ordered sections of the in-app terms of use. Stable order, no duplicates; each maps to a
+     * localized title/body in `strings.xml` and stays aligned with `terms-of-use-ko.md`.
      */
     val termsSections: List<TermsSection> = listOf(
         TermsSection.PolicyStatusAndOperator,
@@ -213,9 +226,9 @@ object AboutContent {
     )
 
     /**
-     * In-app open-source notices for the app's actual direct/core dependencies as declared in the
-     * Gradle build files. All are Apache License 2.0. Versions are deliberately omitted so this list
-     * cannot drift out of sync with the build.
+     * In-app component notices for the app's actual direct/core dependencies as declared in the
+     * Gradle build files, each under its own license. Versions are deliberately omitted so this
+     * list cannot drift out of sync with the build.
      */
     val openSourceNotices: List<OpenSourceNotice> = listOf(
         OpenSourceNotice(
@@ -237,6 +250,11 @@ object AboutContent {
             name = "Kotlin Coroutines",
             license = "Apache License 2.0",
             url = "https://github.com/Kotlin/kotlinx.coroutines",
+        ),
+        OpenSourceNotice(
+            name = "Google Play Billing Library",
+            license = "Android Software Development Kit License",
+            url = "https://developer.android.com/google/play/billing",
         ),
     )
 }

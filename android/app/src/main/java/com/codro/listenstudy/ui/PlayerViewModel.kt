@@ -7,6 +7,7 @@ import android.provider.OpenableColumns
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
+import com.codro.listenstudy.billing.SupporterBillingClient
 import com.codro.listenstudy.data.local.ListenStudyDatabase
 import com.codro.listenstudy.data.repository.*
 import com.codro.listenstudy.playback.CloudKeySaveResult
@@ -54,6 +55,12 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     val cloudKeySaveResult = serviceField { it.cloudKeySaveResult }
     val cloudCacheStats = serviceField { it.cloudCacheStats }
     val cloudError = serviceField { it.cloudError }
+
+    // Application-scoped billing coordinator: one BillingClient connection for the whole process,
+    // never recreated on recomposition or ViewModel recreation, and never holding an Activity.
+    private val supporterBilling = SupporterBillingClient.get(application)
+    val supporterUiState = supporterBilling.uiState
+    val sepiaThemeActive = supporterBilling.sepiaThemeActive
 
     init {
         TtsPlaybackService.start(application)
@@ -145,6 +152,13 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     /** Falls back to phone TTS and continues from the sentence that failed. */
     fun useOnDeviceVoiceForCurrentSentence() = send(ServiceCommand.UseOnDeviceVoiceForCurrentSentence)
     fun dismissCloudError() = send(ServiceCommand.DismissCloudError)
+    /** Foreground/entry refresh: connects if needed, then re-queries Play ownership. */
+    fun refreshSupporter() = supporterBilling.refresh()
+    /** The Activity is a call parameter only — nothing retains it. */
+    fun purchaseSupporter(activity: android.app.Activity) = supporterBilling.launchPurchase(activity)
+    fun restoreSupporter() = supporterBilling.restore()
+    fun setSepiaTheme(enabled: Boolean) = supporterBilling.setSepiaTheme(enabled)
+    fun dismissSupporterMessage() = supporterBilling.clearMessage()
     fun persistNow() { /* Service persists independently. */ }
     fun openTtsSettings() {
         runCatching {

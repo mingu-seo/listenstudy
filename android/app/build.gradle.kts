@@ -13,8 +13,8 @@ android {
         applicationId = "com.codro.listenstudy"
         minSdk = 26
         targetSdk = 35
-        versionCode = 38
-        versionName = "0.13.0-about-policy"
+        versionCode = 39
+        versionName = "0.14.0-supporter-billing"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -45,9 +45,18 @@ dependencies {
     androidTestImplementation(composeBom)
 
     implementation("androidx.core:core-ktx:1.15.0")
+    // Plain billing artifact on purpose: the adapter uses only the callback API, and billing-ktx
+    // would force a Kotlin/KSP toolchain upgrade for its Kotlin 2.3 metadata.
+    implementation("com.android.billingclient:billing:9.1.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.activity:activity-compose:1.10.0")
+    // billing:9.1.0 -> play-services-basement:18.9.0 drags in androidx.fragment:fragment:1.1.0
+    // transitively, but MainActivity uses registerForActivityResult, which lint
+    // (InvalidFragmentVersionForActivityResult) requires Fragment >= 1.3.0 for. Pin a direct,
+    // stable Fragment: 1.8.5 matches the 2025 AndroidX stack (activity 1.10.0, lifecycle 2.8.7,
+    // compileSdk 35) and its Kotlin 1.8-era metadata needs no Kotlin/KSP/Room baseline change.
+    implementation("androidx.fragment:fragment:1.8.5")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
